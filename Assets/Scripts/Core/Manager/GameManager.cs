@@ -12,6 +12,8 @@ public class GameManager : BaseLua
 
     public Text text;
 
+    private bool initRes = true;
+
     void Awake() {
         gameManager = this;
         DontDestroyOnLoad(gameObject);
@@ -37,6 +39,17 @@ public class GameManager : BaseLua
         uluaMgr = new LuaScriptMgr();
         uluaMgr.Start();
         Constants.IS_FIRST_INIT_GAME = false;
+    }
+
+    void Update() {
+        if (AssetBundleManager.AssetBundleManifestObject != null) {
+            if (initRes) {
+                initRes = false;
+                Debug.Log("load complete!");
+            }
+        }
+            
+
     }
 
     private void OnEnable()

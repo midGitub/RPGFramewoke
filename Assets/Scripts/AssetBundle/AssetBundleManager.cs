@@ -62,6 +62,7 @@ public class AssetBundleManager : SingletonBehaviour<AssetBundleManager>
 	public static AssetBundleManifest AssetBundleManifestObject
 	{
 		set {m_AssetBundleManifest = value; }
+        get { return m_AssetBundleManifest; }
 	}
 
 	static public LoadedAssetBundle GetLoadedAssetBundle (string assetBundleName, out string error)

@@ -1,0 +1,6 @@
+version=2
+Windows
+textures/man.unity3d
+prefabs/object/cube.unity3d
+materials/bbb.unity3d
+testlua.lua

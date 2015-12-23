@@ -8,7 +8,7 @@ public class GameGlobalEnum{
         OBJ_CHARACTER,
         OBJ_NPC,
         OBJ_OTHER_PLAYER,
-        OBJ_MAIN_PLAYER,
+        OBJ_MAIN_PLAYER
     }
 
     public enum OBJ_BEHAVIOUR { 
@@ -25,5 +25,9 @@ public class GameGlobalEnum{
         HIT,
         ROLL,
         DEAD
+    }
+
+    public enum eStaticDataType {
+        STATICDATA_SKILL
     }
 }
