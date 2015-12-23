@@ -6,7 +6,7 @@ public class CAnimator{
     private Animator mAnimator;
     private string curAniName;
     private Obj_Character objCharacter;
-    private Dictionary<GameGlobalEnum.OBJ_BEHAVIOUR, StateMachineBehaviour> behaviours = new Dictionary<GameGlobalEnum.OBJ_BEHAVIOUR, StateMachineBehaviour>();
+    private Dictionary<OBJ_BEHAVIOUR, StateMachineBehaviour> behaviours = new Dictionary<OBJ_BEHAVIOUR, StateMachineBehaviour>();
 
     public CAnimator(Animator animator,Obj_Character character) {
         mAnimator = animator;
@@ -40,17 +40,17 @@ public class CAnimator{
         skill2Behaviour.objCharacter = objCharacter;
         idleBehaviour.objCharacter = objCharacter;
 
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.RUN, runBehaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.ATK1, atk1Behaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.ATK2, atk2Behaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.ATK3, atk3Behaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.ATK4, atk4Behaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.IDLE, idleBehaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.DEAD, deadBehaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.ROLL, rollBehaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.SKILL1, skill1Behaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.SKILL2, skill2Behaviour);
-        behaviours.Add(GameGlobalEnum.OBJ_BEHAVIOUR.HIT, hitBehaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.RUN, runBehaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.ATK1, atk1Behaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.ATK2, atk2Behaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.ATK3, atk3Behaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.ATK4, atk4Behaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.IDLE, idleBehaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.DEAD, deadBehaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.ROLL, rollBehaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.SKILL1, skill1Behaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.SKILL2, skill2Behaviour);
+        behaviours.Add(OBJ_BEHAVIOUR.HIT, hitBehaviour);
     }
 
     public void PlayAction(string animName,float speed=1) {
@@ -75,7 +75,7 @@ public class CAnimator{
         mAnimator.SetBool(curAniName,false);
     }
 
-    public StateMachineBehaviour GetBehaviour(GameGlobalEnum.OBJ_BEHAVIOUR behaviour) {
+    public StateMachineBehaviour GetBehaviour(OBJ_BEHAVIOUR behaviour) {
         if (!behaviours.ContainsKey(behaviour))
             return null;
         return behaviours[behaviour];
@@ -94,7 +94,7 @@ public class CAnimator{
         get { return objCharacter; }
     }
 
-    public Dictionary<GameGlobalEnum.OBJ_BEHAVIOUR, StateMachineBehaviour> Behaviours {
+    public Dictionary<OBJ_BEHAVIOUR, StateMachineBehaviour> Behaviours {
         get { return behaviours; }
     }
 

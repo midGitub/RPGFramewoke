@@ -24,7 +24,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
     {
         if (AssetBundleManager.DownloadedObjs.ContainsKey(assetBundleName))
         {
-            callback(AssetBundleManager.DownloadedObjs[assetBundleName]);
+            callback(assetName,AssetBundleManager.DownloadedObjs[assetBundleName]);
             return;
         }
         StartCoroutine(LoadAssetAsync(assetBundleName, assetName, callback));
@@ -70,7 +70,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
         Object obj=request.GetAsset<Object>();
         if (obj != null){
             AssetBundleManager.DownloadedObjs.Add(assetBundleName,obj);
-            callback(request.GetAsset<Object>());
+            callback(assetName,request.GetAsset<Object>());
         }else
             Debug.Log("loaded obj is null!");
   

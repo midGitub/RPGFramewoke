@@ -14,13 +14,13 @@ public class CSkillLoader : CBaseLoader
     private float m_cd;
     public float GetCD()
     {
-        return GetSingle(ref m_cd, list[15]);
+        return GetSingle(ref m_cd, list[2]);
     }
 
     //持续时间
     private float m_lastTime;
     public float GetlastTime()
     {
-        return GetSingle(ref m_lastTime, list[18]);
+        return GetSingle(ref m_lastTime, list[3]);
     }
 }

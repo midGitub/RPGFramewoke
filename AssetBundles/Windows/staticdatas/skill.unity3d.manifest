@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 2941135329
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 97fed948b9c6477706cde6cf246d84dc
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5739de152fea451d09287d3235799715
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: c65119d454abb9a4e8a92627f292a27e, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Dumps/skill.asset
+Dependencies: []

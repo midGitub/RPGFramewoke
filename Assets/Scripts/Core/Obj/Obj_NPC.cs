@@ -6,7 +6,7 @@ public class Obj_NPC : Obj_Character
 
     public Obj_NPC()
     {
-        mObjType = GameGlobalEnum.OBJ_TYPE.OBJ_NPC;
+        mObjType = OBJ_TYPE.OBJ_NPC;
     }
 
 	// Use this for initialization

@@ -12,7 +12,7 @@ public class Obj_Player : Obj_Character
 
     public Obj_Player()
     {
-        mObjType = GameGlobalEnum.OBJ_TYPE.OBJ_OTHER_PLAYER;
+        mObjType = OBJ_TYPE.OBJ_OTHER_PLAYER;
     }
 
 	// Use this for initialization

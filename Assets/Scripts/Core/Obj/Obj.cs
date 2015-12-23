@@ -3,13 +3,13 @@ using System.Collections;
 
 public class Obj : MonoBehaviour {
 
-    protected GameGlobalEnum.OBJ_TYPE mObjType = GameGlobalEnum.OBJ_TYPE.OBJ;
+    protected OBJ_TYPE mObjType = OBJ_TYPE.OBJ;
 
     protected int objId;
 
     protected Transform objTransform;
 
-    public GameGlobalEnum.OBJ_TYPE ObjType {
+    public OBJ_TYPE ObjType {
         get { return mObjType; }
     }
 

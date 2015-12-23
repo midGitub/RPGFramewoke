@@ -25,12 +25,12 @@ public class ObjManager : SingletonObject<ObjManager> {
         
     }
 
-    public void CreateCharacter(GameGlobalEnum.OBJ_TYPE objType) { 
+    public void CreateCharacter(OBJ_TYPE objType) { 
         switch(objType){
-            case GameGlobalEnum.OBJ_TYPE.OBJ_NPC:
+            case OBJ_TYPE.OBJ_NPC:
                 CreateNpc();
                 break;
-            case GameGlobalEnum.OBJ_TYPE.OBJ_OTHER_PLAYER:
+            case OBJ_TYPE.OBJ_OTHER_PLAYER:
                 CreateOtherPlayer();
                 break;
         }

@@ -16,7 +16,7 @@ public class LoadedAssetBundle
 		m_ReferencedCount = 1;
 	}
 }
-public delegate void LoadCallback(UnityEngine.Object obj);
+public delegate void LoadCallback(string assetName,UnityEngine.Object obj);
 public delegate void ProgressCallback(float progress);
 
 public class AssetBundleManager : SingletonBehaviour<AssetBundleManager>

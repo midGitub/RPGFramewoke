@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameGlobalEnum{
     public enum OBJ_TYPE
     {
         OBJ,
@@ -30,4 +29,3 @@ public class GameGlobalEnum{
     public enum eStaticDataType {
         STATICDATA_SKILL
     }
-}

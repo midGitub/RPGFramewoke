@@ -12,7 +12,7 @@ public class Obj_Character : Obj {
     public int a;
 
     public Obj_Character() {
-        mObjType = GameGlobalEnum.OBJ_TYPE.OBJ_CHARACTER;
+        mObjType = OBJ_TYPE.OBJ_CHARACTER;
         baseAttr = new BaseAttr();
     }
 

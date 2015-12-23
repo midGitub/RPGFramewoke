@@ -21,7 +21,8 @@ public class GameManager : BaseLua
 
     void Start() {
         if (Constants.IS_FIRST_INIT_GAME)
-            Init();
+            InitManager();
+        ResourceManager.getInstance().init();
         if (SystemInfo.systemMemorySize < Constants.LIMIT_MEMORY_SIZE || SystemInfo.processorCount < Constants.PROCESSOR_COUNT)
         {
             isLowDevice = true;
@@ -29,7 +30,7 @@ public class GameManager : BaseLua
         }
     }
 
-    private void Init() {         
+    private void InitManager() {         
         gameObject.AddComponent<CheckUpdate>();
         gameObject.AddComponent<NetworkManager>();
         gameObject.AddComponent<UIManager>();
@@ -45,7 +46,7 @@ public class GameManager : BaseLua
         if (AssetBundleManager.AssetBundleManifestObject != null) {
             if (initRes) {
                 initRes = false;
-                Debug.Log("load complete!");
+                ResourceManager.getInstance().StartDownLoad();
             }
         }
             
@@ -89,7 +90,9 @@ public class GameManager : BaseLua
 
 //-----------------------------------test--------------------------------------------
     public void HotUpdateResource() {
-        AssetBundleService.getInstance().LoadAsset("prefabs/object/cube.unity3d", "cube", testPrefabs);
+        //AssetBundleService.getInstance().LoadAsset("prefabs/object/cube.unity3d", "cube", testPrefabs);
+        CSkillLoader skillLoader=CStaticDownload<CSkillLoader>.getInstance().GetStaticInfo(100);
+        GLog.Log(skillLoader.GetSkillName());
     }
 
     public void HotUpdateScript() {
@@ -99,7 +102,7 @@ public class GameManager : BaseLua
         text.text = results[0].ToString();
     }
 
-    private void testPrefabs(UnityEngine.Object obj)
+    private void testPrefabs(string assetName,UnityEngine.Object obj)
     {
         GameObject go = Instantiate(obj as GameObject);
         go.transform.position = Vector3.zero;

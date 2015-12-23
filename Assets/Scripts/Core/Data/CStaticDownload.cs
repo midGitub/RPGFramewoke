@@ -615,7 +615,7 @@ public class CStaticDownload<S> : SingletonObject<CStaticDownload<S>> where S : 
     public void LoadCompleted(string content)
     {
         m_dict.Clear();
-        string[] arrayList = content.Split("\r\n".ToCharArray());
+        string[] arrayList = content.Split(",".ToCharArray());
         string s;
         string[] field;
         string head;
