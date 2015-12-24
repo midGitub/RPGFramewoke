@@ -116,6 +116,16 @@ public class GameManager : MonoBehaviour
         cube.transform.position = new Vector3(range2, range2, range2);
     }
 
+    public void StartGame() {
+        GameObject canvas=GameObject.Find("Canvas");
+        canvas.transform.Find("Test").gameObject.SetActive(false);
+        canvas.transform.Find("Login").gameObject.SetActive(true);
+    }
+
+    public void Login() { 
+        
+    }
+
     private void testPrefabs(string assetName,UnityEngine.Object obj)
     {
         GameObject go = Instantiate(obj as GameObject);
