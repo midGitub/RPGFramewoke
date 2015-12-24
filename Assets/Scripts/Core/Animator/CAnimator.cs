@@ -62,7 +62,7 @@ public class CAnimator{
         //播放新的动画
         mAnimator.SetBool(Animator.StringToHash(animName), true);
         if (!mAnimator.GetBool(Animator.StringToHash(animName))) {
-            Debug.LogError("Error!can not find objCharacter animation:" + animName);
+            GLog.LogError("Error!can not find objCharacter animation:" + animName);
             return;
         }
         mAnimator.speed = speed;

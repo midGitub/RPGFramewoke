@@ -72,7 +72,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
             AssetBundleManager.DownloadedObjs.Add(assetBundleName,obj);
             callback(assetName,request.GetAsset<Object>());
         }else
-            Debug.Log("loaded obj is null!");
+            GLog.Log("loaded obj is null!");
   
     }
 

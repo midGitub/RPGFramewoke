@@ -127,7 +127,7 @@ public class CheckUpdate : MonoBehaviour {
         if(!File.Exists(filePath)){
             return;
         }
-        Debug.Log(string.Format("ApplyPatch: {0}", patchFile));
+        GLog.Log(string.Format("ApplyPatch: {0}", patchFile));
         ZipInputStream s = new ZipInputStream(File.OpenRead(filePath));
         ZipEntry theEntry;
         while ((theEntry = s.GetNextEntry()) != null)
@@ -169,7 +169,7 @@ public class CheckUpdate : MonoBehaviour {
     public static bool SaveDataToLocal(string filePath, byte[] data)
     {
         string localFile = AssetBundleManager.BaseLocalURL.Replace("file://", "") + filePath;
-        Debug.Log("localFile is:" + localFile);
+        GLog.Log("localFile is:" + localFile);
         try
         {
             BinaryWriter writer = new BinaryWriter(File.Create(localFile));
@@ -178,6 +178,7 @@ public class CheckUpdate : MonoBehaviour {
         }
         catch (Exception e)
         {
+            GLog.LogError(e.Message);
             return false;
         }
         return true;

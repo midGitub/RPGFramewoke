@@ -66,6 +66,6 @@ public class BaseLua : MonoBehaviour {
     {
         umgr = null;
         Util.ClearMemory();
-        Debug.Log("~" + name + " was destroy!");
+        GLog.Log("~" + name + " was destroy!");
     }
 }

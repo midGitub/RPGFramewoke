@@ -435,7 +435,7 @@ public abstract class CBaseLoader
 
         if (list.Count == 0)
         {
-            //Debug.LogError(" Key:" + m_uiKey + " TransStrToStringList error,list.count = 0");
+            //GLog.LogError(" Key:" + m_uiKey + " TransStrToStringList error,list.count = 0");
         }
         return list;
 

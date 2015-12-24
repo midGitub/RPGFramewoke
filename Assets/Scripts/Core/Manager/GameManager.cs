@@ -108,6 +108,15 @@ public class GameManager : MonoBehaviour
         GLog.Log(skillLoader.GetSkillName());
     }
 
+    public void TestObjectPoll() {
+        GameObject capsule = ObjectPool.instance.GetObjByName("Prefabs/Capsule");
+        GameObject cube = ObjectPool.instance.GetObjByName("Prefabs/Cube");
+        int range1 = Random.Range(-4, 0);
+        capsule.transform.position = new Vector3(range1, range1, range1);
+        int range2 = Random.Range(0, 4);
+        cube.transform.position = new Vector3(range2, range2, range2);
+    }
+
     private void testPrefabs(string assetName,UnityEngine.Object obj)
     {
         GameObject go = Instantiate(obj as GameObject);

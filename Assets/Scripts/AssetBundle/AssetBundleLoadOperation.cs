@@ -65,7 +65,7 @@ public class AssetBundleLoadLevelOperation : AssetBundleLoadOperation
 	{
 		if (m_Request == null && m_DownloadingError != null)
 		{
-			Debug.LogError(m_DownloadingError);
+            GLog.LogError(m_DownloadingError);
 			return true;
 		}
 		
@@ -126,7 +126,7 @@ public class AssetBundleLoadAssetOperationFull : AssetBundleLoadAssetOperation
 	{
 		if (m_Request == null && m_DownloadingError != null)
 		{
-			Debug.LogError(m_DownloadingError);
+            GLog.LogError(m_DownloadingError);
 			return true;
 		}
 

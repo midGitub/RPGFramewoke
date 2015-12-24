@@ -191,7 +191,7 @@ public class AssetBundleManager : SingletonBehaviour<AssetBundleManager>
 	{
 		if (m_AssetBundleManifest == null)
 		{
-			Debug.LogError("Please initialize AssetBundleManifest by calling AssetBundleManager.Initialize()");
+            GLog.LogError("Please initialize AssetBundleManifest by calling AssetBundleManager.Initialize()");
 			return;
 		}
 		//从配置文件获取所有依赖
