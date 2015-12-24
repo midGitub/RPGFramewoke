@@ -7,7 +7,7 @@ public class LuaManager : BaseLua
     private List<string> luas = new List<string>();
     public LuaScriptMgr uluaMgr;
 
-    private void Init() {
+    public void Init() {
         foreach(string path in luas){
             uluaMgr.DoFile(path);
         }
@@ -20,8 +20,4 @@ public class LuaManager : BaseLua
         string baseUrl = AssetBundleManager.BaseLocalURL.Replace("file://", "");
         luas.Add(baseUrl + "testlua.lua");
 	}
-
-    void Start() {
-        Init();
-    }
 }

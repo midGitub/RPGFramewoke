@@ -48,11 +48,10 @@ public class GameManager : MonoBehaviour
     }
 
     void Update() {
-        if (AssetBundleManager.AssetBundleManifestObject != null) {
-            if (initRes) {
-                initRes = false;
-                ResourceManager.getInstance().StartDownLoad();
-            }
+        if (initRes && AssetBundleManager.AssetBundleManifestObject != null) {
+            initRes = false;
+            ResourceManager.getInstance().StartDownLoad();
+            ManagerStore.luaManager.Init();
         }
             
 
