@@ -19,9 +19,12 @@ public class CheckUpdate : MonoBehaviour {
     private List<string> updateFiles;
     private bool needUpdate = false;
 
-    void Start()
-    {
+    void Awake() {
         AssetBundleManager.SetLocalAssetBundleDir();
+    }
+
+    void Start()
+    {       
         //初始化  
         localContent = new List<string>();
         remoteContent = new List<string>();

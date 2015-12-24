@@ -4,3 +4,6 @@ AssetBundleManifest:
     Info_0:
       Name: staticdatas/skill.unity3d
       Dependencies: {}
+    Info_1:
+      Name: prefabs/object/cube.unity3d
+      Dependencies: {}

@@ -99,4 +99,16 @@ public class ManagerStore{
             return _networkManager;
         }
     }
+
+    /// <summary>
+    /// lua管理器
+    /// </summary>
+    private static LuaManager _luaManager = null;
+    public static LuaManager luaManager {
+        get {
+            if (_luaManager == null)
+                _luaManager = manager.GetComponent<LuaManager>();
+            return _luaManager;
+        }
+    }
 }

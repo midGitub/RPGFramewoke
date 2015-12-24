@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class ResourceManager : SingletonObject<ResourceManager> {
     private Dictionary<string, eStaticDataType> m_StaticDict = new Dictionary<string, eStaticDataType>();
 
-    public void init() {
+    public void Init() {
         m_StaticDict.Add("skill",eStaticDataType.STATICDATA_SKILL);
     }
 

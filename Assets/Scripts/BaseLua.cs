@@ -12,7 +12,7 @@ public class BaseLua : MonoBehaviour {
         {
             if (umgr == null)
             {
-                umgr = ManagerStore.gameManager.uluaMgr;
+                umgr = ManagerStore.luaManager.uluaMgr;
             }
             return umgr;
         }
@@ -21,7 +21,7 @@ public class BaseLua : MonoBehaviour {
     /// <summary>
     /// 执行Lua方法-无参数
     /// </summary>
-    protected object[] CallMethod(string func)
+    public object[] CallMethod(string func)
     {
         if (UluaMrg == null) return null;
         string funcName = name + "." + func;
@@ -30,9 +30,19 @@ public class BaseLua : MonoBehaviour {
     }
 
     /// <summary>
+    /// 执行Lua方法-文件名、方法名
+    /// </summary>
+    public object[] CallMethod(string fileName, string func)
+    {
+        if (UluaMrg == null) return null;
+        string funcName = fileName + "." + func;
+        return umgr.CallLuaFunction(funcName);
+    }
+
+    /// <summary>
     /// 执行Lua方法
     /// </summary>
-    protected object[] CallMethod(string func, GameObject go)
+    public object[] CallMethod(string func, GameObject go)
     {
         if (UluaMrg == null) return null;
         string funcName = name + "." + func;
