@@ -1,1 +1,5 @@
 version=2
+Windows
+prefabs/object/cube.unity3d
+testlua.lua
+staticdatas/skill.unity3d

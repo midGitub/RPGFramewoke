@@ -1,4 +1,4 @@
 GameManager = {};
 function GameManager.hello()
-	return "我是旧版本"
+	return "我是新版本"
 end
