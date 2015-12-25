@@ -118,8 +118,16 @@ public class GameManager : MonoBehaviour
 
     public void StartGame() {
         GameObject canvas=GameObject.Find("Canvas");
-        canvas.transform.Find("Test").gameObject.SetActive(false);
-        canvas.transform.Find("Login").gameObject.SetActive(true);
+        canvas.transform.Find("panel_test").gameObject.SetActive(false);
+        canvas.transform.Find("panel_game_loading").gameObject.SetActive(true);
+        StartCoroutine(ShowLoading());
+    }
+
+    IEnumerator ShowLoading() {
+        GameObject canvas = GameObject.Find("Canvas");
+        yield return new WaitForSeconds(0.5f);
+        canvas.transform.Find("panel_game_loading").gameObject.SetActive(false);
+        canvas.transform.Find("panel_ui_login").gameObject.SetActive(true);
     }
 
     public void Login() { 
