@@ -16,8 +16,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     void Start() {
         DontDestroyOnLoad(gameObject);
         gameObject.AddComponent<CheckUpdate>();
-        InitManager();
-        InitObjPool();    
+        InitManager();  
         if (SystemInfo.systemMemorySize < Constants.LIMIT_MEMORY_SIZE || SystemInfo.processorCount < Constants.PROCESSOR_COUNT)
         {
             isLowDevice = true;
@@ -32,14 +31,8 @@ public class GameManager : SingletonBehaviour<GameManager>
         SoundManager.getInstance().Init();
         TimerManager.getInstance().Init();
         LuaManager.getInstance().Init();
+        ObjectManager.getInstance().Init();
         //TODO other
-    }
-
-
-    private void InitObjPool() {
-        GameObject objPoll = new GameObject("ObjectPool");
-        objPoll.AddComponent<ObjectPool>();
-        DontDestroyOnLoad(objPoll);
     }
 
     void Update() {
@@ -95,6 +88,11 @@ public class GameManager : SingletonBehaviour<GameManager>
         yield return null;
     }
 
+    void OnDestroy() {
+        LuaManager.getInstance().OnDestroy();
+        ResourceManager.getInstance().OnDestroy();
+        UIManager.getInstance().OnDestroy();
+    }
 
 
 //-----------------------------------test--------------------------------------------

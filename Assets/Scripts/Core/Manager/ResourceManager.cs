@@ -5,8 +5,13 @@ using System.Collections.Generic;
 public class ResourceManager : SingletonObject<ResourceManager> {
     private Dictionary<string, eStaticDataType> m_StaticDict = new Dictionary<string, eStaticDataType>();
 
+    private Dictionary<string, BaseMediator> m_mediatorDic = new Dictionary<string, BaseMediator>();
+
     public void Init() {
         m_StaticDict.Add("skill",eStaticDataType.STATICDATA_SKILL);
+
+        m_mediatorDic.Add("panel_test", SingletonObject<TestMediator>.getInstance());
+        m_mediatorDic.Add("panel_ui_login", SingletonObject<LoginMediator>.getInstance());
     }
 
     public void StartDownLoad() {
@@ -14,6 +19,15 @@ public class ResourceManager : SingletonObject<ResourceManager> {
         foreach (KeyValuePair<string, eStaticDataType> kvp in m_StaticDict)
         {
             abService.LoadAsset("staticdatas/" + kvp.Key + ".unity3d", kvp.Key, LoadStaticDataCompleted);
+        }
+
+        UIManager uiManager= UIManager.getInstance();
+        foreach (KeyValuePair<string, BaseMediator> kv in m_mediatorDic)
+        {
+            kv.Value.Path ="prefabs/ui/"+ kv.Key+".unity3d";
+            kv.Value.PanelName = kv.Key;
+            kv.Value.LoadPanel();
+            uiManager.AddMediator(kv.Value);
         }
     }
 
@@ -30,7 +44,9 @@ public class ResourceManager : SingletonObject<ResourceManager> {
         }
     }
 
-    public void ReleaseResources() {
+    public void OnDestroy()
+    {
         m_StaticDict.Clear();
+        m_mediatorDic.Clear();
     }
 }
