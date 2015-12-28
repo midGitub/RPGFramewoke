@@ -10,10 +10,6 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 public class CheckUpdate : MonoBehaviour {
     public delegate void HandleFinishDownload(WWW www);  
-
-    public static readonly string VERSION_FILE = "version.txt";
-    public static readonly string PATCH_FILE = "patch.zip";
-
     private List<string> localContent;
     private List<string> remoteContent;
     private List<string> updateFiles;
@@ -29,12 +25,12 @@ public class CheckUpdate : MonoBehaviour {
         localContent = new List<string>();
         remoteContent = new List<string>();
         //加载本地version配置  
-        StartCoroutine(DownLoad(AssetBundleManager.BaseLocalURL + VERSION_FILE, delegate(WWW localVersion)
+        StartCoroutine(DownLoad(AssetBundleManager.BaseLocalURL + Constants.VERSION_FILE, delegate(WWW localVersion)
         {
             //解析本地version文件
             ParseVersionFile(localVersion.text, localContent);
             //加载服务端version配置  
-            StartCoroutine(DownLoad(Server.RemoteAssetBundleUrl + VERSION_FILE, delegate(WWW serverVersion)
+            StartCoroutine(DownLoad(Server.RemoteAssetBundleUrl + Constants.VERSION_FILE, delegate(WWW serverVersion)
             {
                 //解析服务端vertion文件
                 ParseVersionFile(serverVersion.text, remoteContent);
@@ -56,21 +52,21 @@ public class CheckUpdate : MonoBehaviour {
     }
 
     IEnumerator CopyFiles() {
-        WWW patchWWW = new WWW(Server.RemoteAssetBundleUrl + PATCH_FILE);
+        WWW patchWWW = new WWW(Server.RemoteAssetBundleUrl + Constants.PATCH_FILE);
         yield return patchWWW;
         if(patchWWW.isDone && patchWWW.error==null){
-            if (SaveDataToLocal(PATCH_FILE, patchWWW.bytes))
+            if (SaveDataToLocal(Constants.PATCH_FILE, patchWWW.bytes))
             {
-                ApplyPatch(PATCH_FILE);
+                ApplyPatch(Constants.PATCH_FILE);
                 //解压完之后删除
-                File.Delete(AssetBundleManager.BaseLocalURL.Replace("file://", "")+PATCH_FILE);
+                File.Delete(AssetBundleManager.BaseLocalURL.Replace("file://", "") + Constants.PATCH_FILE);
                 patchWWW.Dispose();  
                 //再复制version文件
-                WWW versionWWW = new WWW(Server.RemoteAssetBundleUrl + VERSION_FILE);
+                WWW versionWWW = new WWW(Server.RemoteAssetBundleUrl + Constants.VERSION_FILE);
                 yield return versionWWW;
                 if (versionWWW.isDone && versionWWW.error == null)
                 {
-                    SaveDataToLocal(VERSION_FILE, versionWWW.bytes);
+                    SaveDataToLocal(Constants.VERSION_FILE, versionWWW.bytes);
                     versionWWW.Dispose();
                     gameObject.AddComponent<AssetBundleService>();
                 }

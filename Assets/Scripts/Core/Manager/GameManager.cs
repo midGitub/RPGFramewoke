@@ -3,26 +3,21 @@ using System.Collections;
 using UnityEngine.UI;
 using LuaInterface;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonBehaviour<GameManager>
 {
     public static GameManager gameManager;
     public bool isLowDevice;
     public float npcRefreshTime = 0.05f;
+    private string lastErrorLog,lastException;
     private bool initRes = true;
 
     public Text text;
 
-    
-
-    void Awake() {
-        gameManager = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
     void Start() {
+        DontDestroyOnLoad(gameObject);
+        gameObject.AddComponent<CheckUpdate>();
         InitManager();
-        InitObjPool();
-        ResourceManager.getInstance().Init();
+        InitObjPool();    
         if (SystemInfo.systemMemorySize < Constants.LIMIT_MEMORY_SIZE || SystemInfo.processorCount < Constants.PROCESSOR_COUNT)
         {
             isLowDevice = true;
@@ -30,13 +25,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void InitManager() {         
-        gameObject.AddComponent<CheckUpdate>();
-        gameObject.AddComponent<NetworkManager>();
-        gameObject.AddComponent<UIManager>();
-        gameObject.AddComponent<SoundManager>();
-        gameObject.AddComponent<TimerManager>();
-        gameObject.AddComponent<LuaManager>();
+    private void InitManager() {
+        ResourceManager.getInstance().Init();
+        NetworkManager.getInstance().Init();
+        UIManager.getInstance().Init();
+        SoundManager.getInstance().Init();
+        TimerManager.getInstance().Init();
+        LuaManager.getInstance().Init();
         //TODO other
     }
 
@@ -51,7 +46,7 @@ public class GameManager : MonoBehaviour
         if (initRes && AssetBundleManager.AssetBundleManifestObject != null) {
             initRes = false;
             ResourceManager.getInstance().StartDownLoad();
-            ManagerStore.luaManager.Init();
+            LuaManager.getInstance().LoadFile();
         }
             
 
@@ -68,27 +63,37 @@ public class GameManager : MonoBehaviour
 
     private void UploadLog(string message, string stacktrace, LogType type)
     {
+        #if UNITY_EDITOR
+                return;
+        #else
         switch (type)
         {
             case LogType.Error:
-                
+                if (!message.Equals(lastErrorLog))
+                    StartCoroutine(doUploadLog(string.Format("{0}\n{1}", message, stacktrace)));
+                lastErrorLog = message;
                 break;
-
-            case LogType.Warning:
-                
-                break;
-
-            case LogType.Log:
-                
-                break;
-
             case LogType.Exception:
-                
+                if(!message.Equals(lastException))
+                    StartCoroutine(doUploadLog(string.Format("{0}\n{1}", message, stacktrace)));
+                lastException = message;
                 break;
         }
+        #endif
     }
 
-
+    IEnumerator doUploadLog(string log)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("log", log);
+        WWW www = new WWW(Server.LogUploadUrl, form);
+        yield return www;
+        if (www.error != null && www.isDone)
+        {
+            GLog.Log("uploadDeviceInfo error is :" + www.error);
+        }
+        yield return null;
+    }
 
 
 
@@ -98,7 +103,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void HotUpdateScript() {
-        object[] results = ManagerStore.luaManager.CallMethod("GameManager", "hello");
+        object[] results = LuaManager.getInstance().CallMethod("GameManager", "hello");
         text.text = results[0].ToString();
     }
 
