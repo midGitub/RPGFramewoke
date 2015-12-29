@@ -54,9 +54,4 @@ public class UIManager : SingletonObject<UIManager>
         go.transform.SetParent(canvasObj.transform);
     }
 
-    public void OnDestroy()
-    {
-        mediators.Clear();
-        uiRoot = null;
-    }
 }

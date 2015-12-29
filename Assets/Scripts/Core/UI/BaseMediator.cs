@@ -32,6 +32,10 @@ public abstract class BaseMediator
         rect.localPosition = Vector3.zero;
         rect.localScale = Vector3.one;
         o.SetActive(false);
+        if (isOpen)
+            DirectOpen();
+        else
+            state = eBaseMediatorState.Close;
     }
 
     public virtual void Open() {
@@ -51,6 +55,7 @@ public abstract class BaseMediator
             return;
         isOpen = false;
         state = eBaseMediatorState.Close;
+        transform.gameObject.SetActive(false);
     }
 
     //第一次打开

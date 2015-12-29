@@ -11,7 +11,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     private string lastErrorLog,lastException;
     private bool initRes = true;
 
-    public Text text;
+    private Text text;
 
     void Start() {
         DontDestroyOnLoad(gameObject);
@@ -85,62 +85,28 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             GLog.Log("uploadDeviceInfo error is :" + www.error);
         }
+        www.Dispose();
         yield return null;
     }
 
-    void OnDestroy() {
+    void OnDestroy()
+    {
         LuaManager.getInstance().OnDestroy();
         ResourceManager.getInstance().OnDestroy();
-        UIManager.getInstance().OnDestroy();
     }
 
 
 //-----------------------------------test--------------------------------------------
-    public void HotUpdateResource() {
-        AssetBundleService.getInstance().LoadAsset("prefabs/object/cube.unity3d", "cube", testPrefabs);
-    }
+    private bool isOpen = true;
 
-    public void HotUpdateScript() {
-        object[] results = LuaManager.getInstance().CallMethod("GameManager", "hello");
-        text.text = results[0].ToString();
-    }
-
-    public void LoadTxt() {
-        CSkillLoader skillLoader = CStaticDownload<CSkillLoader>.getInstance().GetStaticInfo(100);
-        GLog.Log(skillLoader.GetSkillName());
-    }
-
-    public void TestObjectPoll() {
-        GameObject capsule = ObjectPool.instance.GetObjByName("Prefabs/Capsule");
-        GameObject cube = ObjectPool.instance.GetObjByName("Prefabs/Cube");
-        int range1 = Random.Range(-4, 0);
-        capsule.transform.position = new Vector3(range1, range1, range1);
-        int range2 = Random.Range(0, 4);
-        cube.transform.position = new Vector3(range2, range2, range2);
-    }
-
-    public void StartGame() {
-        GameObject canvas=GameObject.Find("Canvas");
-        canvas.transform.Find("panel_test").gameObject.SetActive(false);
-        canvas.transform.Find("panel_game_loading").gameObject.SetActive(true);
-        StartCoroutine(ShowLoading());
-    }
-
-    IEnumerator ShowLoading() {
-        GameObject canvas = GameObject.Find("Canvas");
-        yield return new WaitForSeconds(0.5f);
-        canvas.transform.Find("panel_game_loading").gameObject.SetActive(false);
-        canvas.transform.Find("panel_ui_login").gameObject.SetActive(true);
-    }
-
-    public void Login() { 
-        
-    }
-
-    private void testPrefabs(string assetName,UnityEngine.Object obj)
+    void OnGUI()
     {
-        GameObject go = Instantiate(obj as GameObject);
-        go.transform.position = Vector3.zero;
+        if (isOpen)
+        if (GUI.Button(new Rect(200, 200 + 100, 100, 60), "开始"))
+        {
+            SingletonObject<TestMediator>.getInstance().Open();
+            isOpen=false;
+        }
     }
 
 //-----------------------------------test--------------------------------------------

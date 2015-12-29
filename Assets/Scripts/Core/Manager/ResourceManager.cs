@@ -47,6 +47,5 @@ public class ResourceManager : SingletonObject<ResourceManager> {
     public void OnDestroy()
     {
         m_StaticDict.Clear();
-        m_mediatorDic.Clear();
     }
 }
