@@ -8,7 +8,7 @@ public class ObjectPool : MonoBehaviour {
     public static ObjectPool instance;
 
     private Dictionary<string, List<GameObject>> allObj;
-    //最多能缓存物体的种类数
+    //最多能缓存物体的种类数(暂时)
     private int perTypeMaxSize = 5;
 
     private List<string> allPreRes;
@@ -32,7 +32,7 @@ public class ObjectPool : MonoBehaviour {
     }
 
     //初始化一个新类型的object
-    private void initNewTypeObj(string name,int initCount=5)
+    private void initNewTypeObj(string name,int initCount=3)
     {
         List<GameObject> preRes = new List<GameObject>();
         GameObject template = Resources.Load(name) as GameObject;
@@ -155,7 +155,9 @@ public class ObjectPool : MonoBehaviour {
 
     //清空缓存池
     public void clearPool() {
-        foreach (string key in allObj.Keys)
+        string[] keys = new string[allObj.Count];
+        allObj.Keys.CopyTo(keys,0);
+        foreach (string key in keys)
         {
             deleteObjType(key, true);
         }
