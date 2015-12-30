@@ -41,8 +41,8 @@ public class GameManager : SingletonBehaviour<GameManager>
             ResourceManager.getInstance().StartDownLoad();
             LuaManager.getInstance().LoadFile();
         }
-            
 
+        UIManager.getInstance().Update();
     }
 
     private void OnEnable()

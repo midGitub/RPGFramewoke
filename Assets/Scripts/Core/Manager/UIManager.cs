@@ -54,4 +54,22 @@ public class UIManager : SingletonObject<UIManager>
         go.transform.SetParent(canvasObj.transform);
     }
 
+
+    public BaseMediator GetMediator(string name) {
+        BaseMediator bm = null;
+        mediators.TryGetValue(name, out bm);
+        return bm;
+    }
+
+    public void Update() {
+        BaseMediator bm;
+        foreach (KeyValuePair<string, BaseMediator> kvp in mediators)
+        {
+            bm = kvp.Value;
+            if (bm.IsOpen)
+            {
+                bm.Update();
+            }
+        }
+    }
 }

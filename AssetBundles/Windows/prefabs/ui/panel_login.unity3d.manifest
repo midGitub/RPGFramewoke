@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3754143350
+CRC: 2833730602
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2f3821e610b0565978e652b89f75384c
+    Hash: 7d4d4476acbcdb3d92873d80bfd65b90
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 4f582e19edaea9a6e97feafac53fcb94
+    Hash: 125e2936e6777b332e18904f5fbbc4da
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -22,6 +22,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 - Class: 114
+  Script: {fileID: 575553740, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+- Class: 114
   Script: {fileID: 708705254, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 - Class: 115
   Script: {instanceID: 0}
@@ -34,5 +36,6 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 Assets:
-- Assets/Prefabs/UI/panel_test.prefab
-Dependencies: []
+- Assets/Prefabs/UI/panel_login.prefab
+Dependencies:
+- AssetBundles/Windows/textures/loading_data.unity3d

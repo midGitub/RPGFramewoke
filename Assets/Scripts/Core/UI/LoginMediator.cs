@@ -8,7 +8,7 @@ public class LoginMediator : BaseMediator {
     private GameObject loginBtn;
 
     protected override void AddEvent() {
-       loginBtn = transform.Find("(Button)login").gameObject;
+        loginBtn = transform.Find("login").gameObject;
        EventTriggerListener.Get(loginBtn).PointerClick += OnClick;
     }
 

@@ -63,8 +63,8 @@ public class TestMediator : BaseMediator {
     }
 
     void StartLogin(PointerEventData eventData) {
-        //SingletonObject<TestMediator>.getInstance().Close();
-        //SingletonObject<LoginMediator>.getInstance().Open();
+        SingletonObject<TestMediator>.getInstance().Close();
+        SingletonObject<LoginMediator>.getInstance().Open();
         ObjectPool.instance.clearPool();
     }
 

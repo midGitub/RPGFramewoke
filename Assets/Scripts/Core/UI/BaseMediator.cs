@@ -38,6 +38,10 @@ public abstract class BaseMediator
             state = eBaseMediatorState.Close;
     }
 
+    public virtual void Update() { 
+    
+    }
+
     public virtual void Open() {
         if (isOpen) {
             UpdatePanel();
@@ -97,5 +101,9 @@ public abstract class BaseMediator
     public string Path {
         get { return path; }
         set { path = value; }
+    }
+
+    public bool IsOpen {
+        get { return state == eBaseMediatorState.Open; }
     }
 }
