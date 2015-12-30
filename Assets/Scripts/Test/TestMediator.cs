@@ -39,19 +39,33 @@ public class TestMediator : BaseMediator {
         GLog.Log(skillLoader.GetSkillName());
     }
 
+    private int index = 0;
+
     void TestObjectPoll(PointerEventData eventData)
     {
-        GameObject capsule = ObjectPool.instance.GetObjByName("Prefabs/Capsule");
+        index++;
+        if (index > 5)
+        {
+            GameObject sphere = ObjectPool.instance.GetObjByName("Prefabs/Sphere");
+            int range3 = Random.Range(-1, 1);
+            sphere.transform.position = new Vector3(range3, range3, range3);
+        }
+        if (index < 5 || index > 10)
+        {
+            GameObject capsule = ObjectPool.instance.GetObjByName("Prefabs/Capsule");
+            int range1 = Random.Range(-2, 0);
+            capsule.transform.position = new Vector3(range1, range1, range1);
+        }
+
         GameObject cube = ObjectPool.instance.GetObjByName("Prefabs/Cube");
-        int range1 = Random.Range(-4, 0);
-        capsule.transform.position = new Vector3(range1, range1, range1);
-        int range2 = Random.Range(0, 4);
+        int range2 = Random.Range(0, 2);
         cube.transform.position = new Vector3(range2, range2, range2);
     }
 
     void StartLogin(PointerEventData eventData) {
-        SingletonObject<TestMediator>.getInstance().Close();
-        SingletonObject<LoginMediator>.getInstance().Open();
+        //SingletonObject<TestMediator>.getInstance().Close();
+        //SingletonObject<LoginMediator>.getInstance().Open();
+        ObjectPool.instance.clearPool();
     }
 
     private void testPrefabs(string assetName, UnityEngine.Object obj)

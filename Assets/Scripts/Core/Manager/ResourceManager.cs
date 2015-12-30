@@ -11,7 +11,7 @@ public class ResourceManager : SingletonObject<ResourceManager> {
         m_StaticDict.Add("skill",eStaticDataType.STATICDATA_SKILL);
 
         m_mediatorDic.Add("panel_test", SingletonObject<TestMediator>.getInstance());
-        m_mediatorDic.Add("panel_ui_login", SingletonObject<LoginMediator>.getInstance());
+        //m_mediatorDic.Add("panel_ui_login", SingletonObject<LoginMediator>.getInstance());
     }
 
     public void StartDownLoad() {

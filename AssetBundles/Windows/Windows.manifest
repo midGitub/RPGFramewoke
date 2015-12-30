@@ -8,11 +8,5 @@ AssetBundleManifest:
       Name: prefabs/object/cube.unity3d
       Dependencies: {}
     Info_2:
-      Name: prefabs/ui/panel_game_loading.unity3d
-      Dependencies: {}
-    Info_3:
-      Name: prefabs/ui/panel_ui_login.unity3d
-      Dependencies: {}
-    Info_4:
       Name: prefabs/ui/panel_test.unity3d
       Dependencies: {}
