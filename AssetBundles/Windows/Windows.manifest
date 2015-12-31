@@ -24,3 +24,15 @@ AssetBundleManifest:
     Info_6:
       Name: staticdatas/skill.unity3d
       Dependencies: {}
+    Info_7:
+      Name: staticdatas/tesmecanim.unity3d
+      Dependencies: {}
+    Info_8:
+      Name: prefabs/character/ls.unity3d
+      Dependencies: {}
+    Info_9:
+      Name: prefabs/character/boss_jianling.unity3d
+      Dependencies: {}
+    Info_10:
+      Name: staticdatas/testscene2xml.unity3d
+      Dependencies: {}

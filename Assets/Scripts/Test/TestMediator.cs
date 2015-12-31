@@ -68,7 +68,7 @@ public class TestMediator : BaseMediator {
         ObjectPool.instance.clearPool();
     }
 
-    private void testPrefabs(string assetName, UnityEngine.Object obj)
+    private void testPrefabs(string assetName, UnityEngine.Object obj,string extraInfo)
     {
         GameObject go =GameObject.Instantiate(obj as GameObject);
         go.transform.position = Vector3.zero;

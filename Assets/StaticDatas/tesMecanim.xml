@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <scene sceneName="tesMecanim">
+    <gameObject objectName="ls" objectAsset="prefabs/character/ls.unity3d">
+      <transform>
+        <position x="0.65" y="0" z="0" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+    <gameObject objectName="ls1" objectAsset="prefabs/character/ls.unity3d">
+      <transform>
+        <position x="-1.07" y="0" z="0" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+  </scene>
+</root>

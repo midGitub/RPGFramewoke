@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <scene sceneName="testScene2Xml">
+    <gameObject objectName="ground" objectAsset="prefabs/object/ground.unity3d">
+      <transform>
+        <position x="0" y="0" z="0" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="50" y="0.1" z="50" />
+      </transform>
+    </gameObject>
+    <gameObject objectName="Boss3" objectAsset="prefabs/character/boss_jianling.unity3d">
+      <transform>
+        <position x="-18.91912" y="0.05" z="19.77978" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+    <gameObject objectName="Boss4" objectAsset="prefabs/character/boss_jianling.unity3d">
+      <transform>
+        <position x="-15.94092" y="0.05" z="-16.24389" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+    <gameObject objectName="Boss2" objectAsset="prefabs/character/boss_jianling.unity3d">
+      <transform>
+        <position x="19.40181" y="0.05" z="18.98466" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+    <gameObject objectName="Boss1" objectAsset="prefabs/character/boss_jianling.unity3d">
+      <transform>
+        <position x="18.22741" y="0.05" z="-17.94868" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+    <gameObject objectName="ls" objectAsset="prefabs/character/ls.unity3d">
+      <transform>
+        <position x="-1.028673" y="0.05" z="-0.1882973" />
+        <rotation x="0" y="0" z="0" />
+        <scale x="1" y="1" z="1" />
+      </transform>
+    </gameObject>
+  </scene>
+</root>

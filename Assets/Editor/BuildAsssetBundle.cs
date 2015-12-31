@@ -124,7 +124,8 @@ public class BuildAsssetBundle : Editor
         foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets))
         {
             string filePath=AssetDatabase.GetAssetPath(obj);
-            if(!filePath.Contains(".txt")){
+            if (!filePath.Contains(".txt") && !filePath.Contains(".xml"))
+            {
                 continue;
             }
             StreamReader reader = new StreamReader(filePath, System.Text.Encoding.ASCII);

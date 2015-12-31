@@ -32,7 +32,7 @@ public class ResourceManager : SingletonObject<ResourceManager> {
         }
     }
 
-    private void LoadStaticDataCompleted(string assetName,UnityEngine.Object asset)
+    private void LoadStaticDataCompleted(string assetName, UnityEngine.Object asset, string extraInfo)
     {
         if (!m_StaticDict.ContainsKey(assetName))
             return;

@@ -22,8 +22,9 @@ public abstract class BaseMediator
             return;
         AssetBundleService.getInstance().LoadAsset(path, panelName, LoadPanelComplete);
     }
-    
-    public void LoadPanelComplete(string name, UnityEngine.Object asset) {
+
+    public void LoadPanelComplete(string name, UnityEngine.Object asset, string extraInfo)
+    {
         GameObject o = (GameObject)UnityEngine.Object.Instantiate(asset);
         o.name = name;
         transform = o.transform;

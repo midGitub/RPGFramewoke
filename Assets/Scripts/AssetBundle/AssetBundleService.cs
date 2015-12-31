@@ -20,15 +20,23 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
         StartCoroutine(LoadManifest());
     }
 
-    public void LoadAsset(string assetBundleName, string assetName, LoadCallback callback)
+    public void LoadAsset(string assetBundleName, string assetName, LoadCallback callback,string extraInfo=null)
     {
+        if (assetName == null)
+            assetName = GainAssetName(assetBundleName);
         if (AssetBundleManager.DownloadedObjs.ContainsKey(assetBundleName))
         {
-            callback(assetName,AssetBundleManager.DownloadedObjs[assetBundleName]);
+            callback(assetName, AssetBundleManager.DownloadedObjs[assetBundleName], extraInfo);
             return;
         }
-        StartCoroutine(LoadAssetAsync(assetBundleName, assetName, callback));
+        StartCoroutine(LoadAssetAsync(assetBundleName, assetName, callback, extraInfo));
         AssetBundleManager.UnloadAssetBundle(assetBundleName);
+    }
+
+    private string GainAssetName(string assetBundleName)
+    {
+        string[] splits = assetBundleName.Split('/');
+        return splits[splits.Length - 1].Split('.')[0];
     }
 
     public void LoadLevel(string assetBundleName, string levelName, bool isAdditive,ProgressCallback callback)
@@ -61,7 +69,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
             yield return StartCoroutine(request);
     }
 
-    protected IEnumerator LoadAssetAsync(string assetBundleName, string assetName, LoadCallback callback)
+    protected IEnumerator LoadAssetAsync(string assetBundleName, string assetName, LoadCallback callback, string extraInfo)
     {
         AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(Object));
         if (request == null)
@@ -70,7 +78,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
         Object obj=request.GetAsset<Object>();
         if (obj != null){
             AssetBundleManager.DownloadedObjs.Add(assetBundleName,obj);
-            callback(assetName,request.GetAsset<Object>());
+            callback(assetName, request.GetAsset<Object>(), extraInfo);
         }else
             GLog.Log("loaded obj is null!");
   
