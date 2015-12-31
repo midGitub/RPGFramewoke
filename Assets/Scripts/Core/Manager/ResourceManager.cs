@@ -12,7 +12,7 @@ public class ResourceManager : SingletonObject<ResourceManager> {
 
         m_mediatorDic.Add("panel_test", SingletonObject<TestMediator>.getInstance());
         m_mediatorDic.Add("panel_login", SingletonObject<LoginMediator>.getInstance());
-        //m_mediatorDic.Add("panel_loading", SingletonObject<LoadingMediator>.getInstance());
+        m_mediatorDic.Add("panel_loading", SingletonObject<LoadingMediator>.getInstance());
     }
 
     public void StartDownLoad() {

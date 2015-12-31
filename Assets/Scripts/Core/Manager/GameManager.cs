@@ -11,8 +11,6 @@ public class GameManager : SingletonBehaviour<GameManager>
     private string lastErrorLog,lastException;
     private bool initRes = true;
 
-    private Text text;
-
     void Start() {
         DontDestroyOnLoad(gameObject);
         gameObject.AddComponent<CheckUpdate>();
@@ -41,7 +39,6 @@ public class GameManager : SingletonBehaviour<GameManager>
             ResourceManager.getInstance().StartDownLoad();
             LuaManager.getInstance().LoadFile();
         }
-
         UIManager.getInstance().Update();
     }
 
@@ -104,7 +101,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (isOpen)
         if (GUI.Button(new Rect(200, 200 + 100, 100, 60), "开始"))
         {
-            SingletonObject<TestMediator>.getInstance().Open();
+            SingletonObject<LoadingMediator>.getInstance().Open();
             isOpen=false;
         }
     }
