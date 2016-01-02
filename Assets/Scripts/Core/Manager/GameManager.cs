@@ -101,12 +101,8 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (isOpen)
         if (GUI.Button(new Rect(200, 200 + 100, 100, 60), "开始"))
         {
-            //SingletonObject<LoadingMediator>.getInstance().Open();
+            SingletonObject<TestMediator>.getInstance().Open();
             isOpen = false;
-            //SceneXmlObj xmlObj = XmlTools.ParseXmlByPath(Application.dataPath + "/StaticDatas/tesMecanim.xml");
-            //GLog.Log("--------------------------"+xmlObj.SceneName);
-
-            XmlTools.test();
         }
     }
 

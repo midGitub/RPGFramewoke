@@ -65,10 +65,7 @@ public class XmlTools{
     {
         FileStreamHolder file = GameObject.Instantiate(obj as FileStreamHolder);
         string content=file.Content;
-        Debug.Log("content-------------"+content);
         SceneXmlObj  xmlObj= ParseXmlByString(file.Content);
-        SceneBuilder.getInstance().GenerateScene(xmlObj);
-
-        //Debug.Log("xmlObj-------------" + xmlObj.SceneName);
+        SceneManager.getInstance().GenerateScene(xmlObj);
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class LoadingMediator : BaseMediator {
     private Slider slider;
     private Text text;
+    private float progress;
 
     protected override void AddEvent()
     {
@@ -13,18 +14,19 @@ public class LoadingMediator : BaseMediator {
         text = transform.Find("Text").GetComponent<Text>();
     }
 
-    private float current;
-
     public override void Update()
     {
         base.Update();
-        current+=Time.deltaTime;
-        slider.value = current / 10.0f;
-        text.text = (current / 10.0f) * 100 + "%";
-        if (current >= 10) {
+        text.text = progress * 100 + "%";
+        slider.value = progress;
+        GLog.Log("progress-------"+progress);
+        if (progress >= 1) {
             Close();
-            current = 0;
-            SingletonObject<LoginMediator>.getInstance().Open();
+            progress = 0;
         }
+    }
+
+    public float Progress {
+        set { progress = value; }
     }
 }

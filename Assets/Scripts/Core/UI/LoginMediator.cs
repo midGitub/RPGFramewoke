@@ -15,5 +15,8 @@ public class LoginMediator : BaseMediator {
     void OnClick(PointerEventData eventData)
     {
         GLog.Log("login success!");
+        SingletonObject<LoadingMediator>.getInstance().Open();
+        Close();
+        XmlTools.test();
     }
 }
