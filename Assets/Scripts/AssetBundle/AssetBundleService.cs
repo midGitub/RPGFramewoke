@@ -27,10 +27,10 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
         if (AssetBundleManager.DownloadedObjs.ContainsKey(assetBundleName))
         {
             callback(assetName, AssetBundleManager.DownloadedObjs[assetBundleName], extraInfo);
+            AssetBundleManager.UnloadAssetBundle(assetBundleName);
             return;
         }
-        StartCoroutine(LoadAssetAsync(assetBundleName, assetName, callback, extraInfo));
-        AssetBundleManager.UnloadAssetBundle(assetBundleName);
+        StartCoroutine(LoadAssetAsync(assetBundleName, assetName, callback, extraInfo));      
     }
 
     private string GainAssetName(string assetBundleName)
@@ -41,8 +41,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
 
     public void LoadLevel(string assetBundleName, string levelName, bool isAdditive,ProgressCallback callback)
     {
-        StartCoroutine(LoadLevelAsync(assetBundleName, levelName, isAdditive));
-        AssetBundleManager.UnloadAssetBundle(assetBundleName);
+        StartCoroutine(LoadLevelAsync(assetBundleName, levelName, isAdditive));      
         currentLevelName = assetBundleName;
         currentCallback = callback;
         isLoadLevel = true;
@@ -55,6 +54,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
             if (!www.isDone)
                 currentCallback(www.progress);
             else {
+                AssetBundleManager.UnloadAssetBundle(currentLevelName);
                 isLoadLevel = false;
                 currentCallback = null;
                 currentLevelName = null;
@@ -79,6 +79,7 @@ public class AssetBundleService : SingletonBehaviour<AssetBundleService>
         if (obj != null){
             AssetBundleManager.DownloadedObjs.Add(assetBundleName,obj);
             callback(assetName, request.GetAsset<Object>(), extraInfo);
+            AssetBundleManager.UnloadAssetBundle(assetBundleName);
         }else
             GLog.Log("loaded obj is null!");
   

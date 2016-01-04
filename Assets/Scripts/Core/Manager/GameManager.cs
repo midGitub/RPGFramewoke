@@ -13,7 +13,11 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     void Start() {
         DontDestroyOnLoad(gameObject);
-        gameObject.AddComponent<CheckUpdate>();
+        //暂时不检查更新
+        //gameObject.AddComponent<CheckUpdate>();
+        AssetBundleManager.SetLocalAssetBundleDir();
+        gameObject.AddComponent<AssetBundleService>();
+
         InitManager();  
         if (SystemInfo.systemMemorySize < Constants.LIMIT_MEMORY_SIZE || SystemInfo.processorCount < Constants.PROCESSOR_COUNT)
         {
