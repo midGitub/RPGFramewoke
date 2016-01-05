@@ -14,8 +14,20 @@ public class Util {
     /// <summary>
     /// 取得Lua路径
     /// </summary>
-    public static string LuaPath(string name) {
-        string path = Application.dataPath;
+    public static string LuaPath(string name) {       
+        //如果不是ulua自带的lua脚本
+        if (name.Contains(Utility.AssetBundlesOutputPath)) {
+            return name;            
+        }
+        string path = null;
+        if (Application.isEditor) {
+            path = Application.dataPath;
+        }else if (Application.isMobilePlatform || Application.isConsolePlatform)
+        {
+            path = Application.streamingAssetsPath;
+        }else {
+            path = "file://" + Application.streamingAssetsPath;
+        }
         string lowerName = name.ToLower();
         if (lowerName.EndsWith(".lua")) {
             int index = name.LastIndexOf('.');
@@ -91,5 +103,67 @@ public class Util {
                    Application.platform == RuntimePlatform.OSXEditor ||
                    Application.platform == RuntimePlatform.OSXPlayer;
         }
+    }
+
+
+
+    /// <summary>
+    /// 应用程序内容路径
+    /// </summary>
+    public static string AppContentPath()
+    {
+        string path = string.Empty;
+        switch (Application.platform)
+        {
+            case RuntimePlatform.Android:
+                path = "jar:file://" + Application.dataPath + "!/assets/";
+                break;
+            case RuntimePlatform.IPhonePlayer:
+                path = Application.dataPath + "/Raw/";
+                break;
+            default:
+                path = Application.dataPath + "/" + Constants.AssetDirname + "/";
+                break;
+        }
+        return path;
+    }
+
+    /// <summary>
+    /// 目标目录
+    /// </summary>
+    public static string ToPath
+    {
+        get
+        {
+            if (Application.isMobilePlatform)
+            {
+                return Application.persistentDataPath;
+            }
+            return Application.dataPath + "/Sample";
+        }
+    }
+
+    /// <summary>
+    /// 源目录
+    /// </summary>
+    public static string FromPath {
+        get
+        {
+            if (Application.isMobilePlatform)
+            {
+                return "file://"+Application.streamingAssetsPath + "/AssetBundles";
+            }
+            return Application.streamingAssetsPath + "/AssetBundles";
+        }
+    }
+    
+    /// <summary>
+    /// 获取指定字符串后面的所有内容
+    /// </summary>
+    public static string CutString(string source,string removeStr) {
+        if (!source.Contains(removeStr))
+            return source;
+        int index=source.IndexOf(removeStr);
+        return source.Substring(index + removeStr.Length);
     }
 }

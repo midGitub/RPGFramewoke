@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 3555230189
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 95dca1cc487e1e8985a164dc77215f38
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5739de152fea451d09287d3235799715
+HashAppended: 0
+ClassTypes:
+- Class: 114
+  Script: {fileID: 11500000, guid: c65119d454abb9a4e8a92627f292a27e, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/Dumps/testScene2Xml.asset
+Dependencies: []

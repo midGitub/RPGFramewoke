@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using LuaInterface;
+using System.IO;
+using System.Collections.Generic;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
@@ -23,7 +25,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             isLowDevice = true;
             npcRefreshTime = 0.09f;
-        }
+        }    
     }
 
     private void InitManager() {
@@ -32,7 +34,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         UIManager.getInstance().Init();
         SoundManager.getInstance().Init();
         TimerManager.getInstance().Init();
-        LuaManager.getInstance().Init();
+        //LuaManager.getInstance().Init();
         ObjectManager.getInstance().Init();
         //TODO other
     }
@@ -41,9 +43,65 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (initRes && AssetBundleManager.AssetBundleManifestObject != null) {
             initRes = false;
             ResourceManager.getInstance().StartDownLoad();
-            LuaManager.getInstance().LoadFile();
+            //LuaManager.getInstance().LoadFile();
         }
         UIManager.getInstance().Update();
+    }
+
+    IEnumerator CopyFilesToPersistent() {
+        string copyTo = Util.ToPath;
+        string copyFrom = Util.FromPath;
+        Debug.Log("copyTo----" + copyTo + "--copyFrom----" + copyFrom);
+        FindFiles(copyFrom);
+        Debug.Log("dirPaths-------" + dirPaths.Count + "----filePaths---" + filePaths.Count);
+        string tempPath=null;
+        foreach (string path in dirPaths)
+        {
+            tempPath = copyTo + Util.CutString(path, "StreamingAssets");
+            if (!Directory.Exists(tempPath))
+                Directory.CreateDirectory(tempPath);
+        }
+        int size=filePaths.Count;
+        for (int i = 0; i < size; i++) {
+            tempPath = copyTo + Util.CutString(filePaths[i], "StreamingAssets");
+            if (Application.isMobilePlatform)
+            {
+                WWW www = new WWW(filePaths[i]);
+                yield return www;
+                if (www.isDone && www.error == null)
+                {
+                    File.WriteAllBytes(tempPath, www.bytes);
+                }
+                yield return 0;
+            }
+            else
+                File.Copy(filePaths[i], tempPath, true);
+            yield return new WaitForEndOfFrame();
+            SingletonObject<LoadingMediator>.getInstance().Progress = (i + 1) / (float)size;
+        }
+        yield return null;
+        dirPaths.Clear();
+        filePaths.Clear();
+    }
+
+    private List<string> dirPaths = new List<string>();
+    private List<string> filePaths = new List<string>();
+
+    private void FindFiles(string path) {
+        if (File.Exists(path))
+        {
+            filePaths.Add(path);
+        }
+        else if (Directory.Exists(path))
+        {
+            dirPaths.Add(path);
+            string[] dirs=Directory.GetDirectories(path);
+            foreach (string dir in dirs)
+                FindFiles(dir);
+            string[] files=Directory.GetFiles(path);
+            foreach (string file in files)
+                FindFiles(file);
+        }
     }
 
     private void OnEnable()
@@ -106,6 +164,8 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (GUI.Button(new Rect(200, 200 + 100, 100, 60), "开始"))
         {
             SingletonObject<TestMediator>.getInstance().Open();
+            //StartCoroutine(CopyFilesToPersistent());
+            //SingletonObject<LoadingMediator>.getInstance().Open();
             isOpen = false;
         }
     }
