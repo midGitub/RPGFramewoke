@@ -29,3 +29,10 @@ using System.Collections;
     public enum eStaticDataType {
         STATICDATA_SKILL
     }
+
+    public enum eGameState
+    {
+        Loading = 0,
+        Login = 1,
+        Home = 2,
+    }

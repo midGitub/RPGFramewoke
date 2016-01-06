@@ -16,6 +16,7 @@ public abstract class BaseMediator
     protected bool isFirstOpen=true;
     protected bool isOpen;
     protected eBaseMediatorState state = eBaseMediatorState.NotLoad;
+    protected bool loadDone = false;
 
     public virtual void LoadPanel() {
         if (string.IsNullOrEmpty(panelName) || string.IsNullOrEmpty(path))
@@ -23,7 +24,7 @@ public abstract class BaseMediator
         AssetBundleService.getInstance().LoadAsset(path, panelName, LoadPanelComplete);
     }
 
-    public void LoadPanelComplete(string name, UnityEngine.Object asset, string extraInfo)
+    public void LoadPanelComplete(string name, UnityEngine.Object asset, string extraInfo=null)
     {
         GameObject o = (GameObject)UnityEngine.Object.Instantiate(asset);
         o.name = name;
@@ -37,6 +38,8 @@ public abstract class BaseMediator
             DirectOpen();
         else
             state = eBaseMediatorState.Close;
+        loadDone = true;
+        ResourceManager.currentCount++;
     }
 
     public virtual void Update() { 
@@ -106,5 +109,9 @@ public abstract class BaseMediator
 
     public bool IsOpen {
         get { return state == eBaseMediatorState.Open; }
+    }
+
+    public bool LoadDone {
+        get { return loadDone; }
     }
 }

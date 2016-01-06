@@ -15,7 +15,7 @@ using UnityEditor;
             else if (Application.isWebPlayer)
                 return System.IO.Path.GetDirectoryName(Application.absoluteURL).Replace("\\", "/") + "/StreamingAssets";
             else if (Application.isMobilePlatform || Application.isConsolePlatform)
-                return Application.streamingAssetsPath;
+                return "file://" + Application.persistentDataPath;
             else // For standalone player.
                 return "file://" + Application.streamingAssetsPath;
         }

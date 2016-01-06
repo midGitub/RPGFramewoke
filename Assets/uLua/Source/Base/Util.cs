@@ -20,14 +20,16 @@ public class Util {
             return name;            
         }
         string path = null;
-        if (Application.isEditor) {
-            path = Application.dataPath;
-        }else if (Application.isMobilePlatform || Application.isConsolePlatform)
+        if (Application.isEditor)
         {
-            path = Application.streamingAssetsPath;
-        }else {
-            path = "file://" + Application.streamingAssetsPath;
+            path = Application.dataPath;
         }
+        else if (Application.isMobilePlatform || Application.isConsolePlatform)
+        {
+            path = Application.persistentDataPath + "/AssetBundles";
+        }
+        else
+            path = "file://" + Application.streamingAssetsPath + "/AssetBundles";
         string lowerName = name.ToLower();
         if (lowerName.EndsWith(".lua")) {
             int index = name.LastIndexOf('.');
@@ -106,28 +108,6 @@ public class Util {
     }
 
 
-
-    /// <summary>
-    /// 应用程序内容路径
-    /// </summary>
-    public static string AppContentPath()
-    {
-        string path = string.Empty;
-        switch (Application.platform)
-        {
-            case RuntimePlatform.Android:
-                path = "jar:file://" + Application.dataPath + "!/assets/";
-                break;
-            case RuntimePlatform.IPhonePlayer:
-                path = Application.dataPath + "/Raw/";
-                break;
-            default:
-                path = Application.dataPath + "/" + Constants.AssetDirname + "/";
-                break;
-        }
-        return path;
-    }
-
     /// <summary>
     /// 目标目录
     /// </summary>
@@ -139,7 +119,7 @@ public class Util {
             {
                 return Application.persistentDataPath;
             }
-            return Application.dataPath + "/Sample";
+            return Application.dataPath.Replace("/Assets","") + "/Sample";
         }
     }
 
@@ -151,9 +131,9 @@ public class Util {
         {
             if (Application.isMobilePlatform)
             {
-                return "file://"+Application.streamingAssetsPath + "/AssetBundles";
+                return Application.streamingAssetsPath;
             }
-            return Application.streamingAssetsPath + "/AssetBundles";
+            return Application.dataPath + "/StreamingAssets";
         }
     }
     

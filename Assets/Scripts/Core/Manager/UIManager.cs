@@ -42,6 +42,11 @@ public class UIManager : SingletonObject<UIManager>
         eventSystem.AddComponent<StandaloneInputModule>();
         eventSystem.AddComponent<TouchInputModule>();
         eventSystem.transform.parent = uiRoot.transform;
+
+        //初始化loading面板
+        LoadingMediator pLoading = SingletonObject<LoadingMediator>.getInstance();
+        pLoading.LoadPanelComplete(pLoading.LoadingGame.name, pLoading.LoadingGame);
+        AddMediator(pLoading);
     }
 
     public void AddMediator(BaseMediator baseMediator)

@@ -178,6 +178,7 @@ public class AssetBundleManager : SingletonBehaviour<AssetBundleManager>
 			return true;
 		WWW download = null;
 		string url = m_BaseLocalURL + assetBundleName;
+        Debug.Log("url------------"+url);
 		if (isLoadingAssetBundleManifest)
 			download = new WWW(url);
 		else

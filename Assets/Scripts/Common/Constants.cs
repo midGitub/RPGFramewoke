@@ -6,8 +6,6 @@ public class Constants{
     public static readonly string VERSION_FILE = "version.txt";
     //补丁包
     public static readonly string PATCH_FILE = "patch.zip";
-    public static string AssetDirname = "StreamingAssets";      //素材目录 
-    public static string AppName = "mmoframework";           //应用程序名称
 
     public const int LIMIT_MEMORY_SIZE = 1024;
     public const int PROCESSOR_COUNT= 2;

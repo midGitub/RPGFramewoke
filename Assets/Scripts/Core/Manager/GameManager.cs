@@ -12,14 +12,14 @@ public class GameManager : SingletonBehaviour<GameManager>
     public float npcRefreshTime = 0.05f;
     private string lastErrorLog,lastException;
     private bool initRes = true;
+    private bool copyDone = false;
+    private eGameState currentState;//当前状态
 
     void Start() {
         DontDestroyOnLoad(gameObject);
         //暂时不检查更新
         //gameObject.AddComponent<CheckUpdate>();
         AssetBundleManager.SetLocalAssetBundleDir();
-        gameObject.AddComponent<AssetBundleService>();
-
         InitManager();  
         if (SystemInfo.systemMemorySize < Constants.LIMIT_MEMORY_SIZE || SystemInfo.processorCount < Constants.PROCESSOR_COUNT)
         {
@@ -40,68 +40,84 @@ public class GameManager : SingletonBehaviour<GameManager>
     }
 
     void Update() {
-        if (initRes && AssetBundleManager.AssetBundleManifestObject != null) {
+        if (copyDone)
+        {          
+            gameObject.AddComponent<AssetBundleService>();
+            copyDone=false;
+        }
+        if(initRes && AssetBundleManager.AssetBundleManifestObject != null){
             initRes = false;
             ResourceManager.getInstance().StartDownLoad();
-            //LuaManager.getInstance().LoadFile();
+            LuaManager.getInstance().Init();
+            LuaManager.getInstance().LoadFile();
         }
         UIManager.getInstance().Update();
+        LoadingManager.getInstance().Update();
     }
 
-    IEnumerator CopyFilesToPersistent() {
-        string copyTo = Util.ToPath;
-        string copyFrom = Util.FromPath;
-        Debug.Log("copyTo----" + copyTo + "--copyFrom----" + copyFrom);
-        FindFiles(copyFrom);
-        Debug.Log("dirPaths-------" + dirPaths.Count + "----filePaths---" + filePaths.Count);
-        string tempPath=null;
-        foreach (string path in dirPaths)
-        {
-            tempPath = copyTo + Util.CutString(path, "StreamingAssets");
-            if (!Directory.Exists(tempPath))
-                Directory.CreateDirectory(tempPath);
+    public void SetGameState(eGameState state)
+    {
+        currentState = state;
+        switch(state){
+            case eGameState.Loading:
+
+                break;
+
+            case eGameState.Login:
+                SingletonObject<TestMediator>.getInstance().Open();
+                break;
         }
-        int size=filePaths.Count;
-        for (int i = 0; i < size; i++) {
-            tempPath = copyTo + Util.CutString(filePaths[i], "StreamingAssets");
-            if (Application.isMobilePlatform)
+    }
+
+    IEnumerator CopyToPersistent() {
+        string copyTo = Util.ToPath;
+        if (!Directory.Exists(copyTo))
+            Directory.CreateDirectory(copyTo);    
+        string copyFrom = Util.FromPath;
+        string fileListFrom = copyFrom+"/files.txt";
+        string fileListTo = copyTo + "/files.txt";
+        if (File.Exists(fileListTo)) File.Delete(fileListTo);
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            WWW www = new WWW(fileListFrom);
+            yield return www;
+            if (www.isDone && www.error==null)
             {
-                WWW www = new WWW(filePaths[i]);
+                File.WriteAllBytes(fileListTo, www.bytes);
+            }
+            www.Dispose();
+            yield return 0;
+        }
+        else
+            File.Copy(fileListFrom, fileListTo, true);
+        yield return new WaitForEndOfFrame();
+        string[] lines=File.ReadAllLines(fileListTo);
+        int len=lines.Length;
+        string fileFrom = null;
+        string fileTo = null;
+        for (int i = 0; i < len; i++)
+        {
+            fileFrom = Util.FromPath + "/" + lines[i];
+            fileTo = Util.ToPath + "/" + lines[i];
+            string dir=Path.GetDirectoryName(fileTo);
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            if (Application.platform == RuntimePlatform.Android)
+            {
+                WWW www = new WWW(fileFrom);
                 yield return www;
                 if (www.isDone && www.error == null)
                 {
-                    File.WriteAllBytes(tempPath, www.bytes);
+                    File.WriteAllBytes(fileTo, www.bytes);
                 }
+                www.Dispose();
                 yield return 0;
             }
-            else
-                File.Copy(filePaths[i], tempPath, true);
+            else File.Copy(fileFrom, fileTo, true);
             yield return new WaitForEndOfFrame();
-            SingletonObject<LoadingMediator>.getInstance().Progress = (i + 1) / (float)size;
+            SingletonObject<LoadingMediator>.getInstance().Progress = (i + 1) / (float)len;
         }
+        copyDone = true;
         yield return null;
-        dirPaths.Clear();
-        filePaths.Clear();
-    }
-
-    private List<string> dirPaths = new List<string>();
-    private List<string> filePaths = new List<string>();
-
-    private void FindFiles(string path) {
-        if (File.Exists(path))
-        {
-            filePaths.Add(path);
-        }
-        else if (Directory.Exists(path))
-        {
-            dirPaths.Add(path);
-            string[] dirs=Directory.GetDirectories(path);
-            foreach (string dir in dirs)
-                FindFiles(dir);
-            string[] files=Directory.GetFiles(path);
-            foreach (string file in files)
-                FindFiles(file);
-        }
     }
 
     private void OnEnable()
@@ -163,12 +179,75 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (isOpen)
         if (GUI.Button(new Rect(200, 200 + 100, 100, 60), "开始"))
         {
-            SingletonObject<TestMediator>.getInstance().Open();
             //StartCoroutine(CopyFilesToPersistent());
-            //SingletonObject<LoadingMediator>.getInstance().Open();
+            StartCoroutine(CopyToPersistent());
+            SingletonObject<LoadingMediator>.getInstance().Open();
             isOpen = false;
         }
     }
 
-//-----------------------------------test--------------------------------------------
+    #region 根据目录路径读取该目录下所有文件夹及文件夹，并将其复制到Persistent路径(Android平台不可用)
+    private List<string> dirPaths;
+    private List<string> filePaths;
+
+    IEnumerator CopyFilesToPersistent()
+    {
+        string copyTo = Util.ToPath;
+        string copyFrom = Util.FromPath;
+        Debug.Log("copyTo----" + copyTo + "--copyFrom----" + copyFrom);
+        dirPaths = new List<string>();
+        filePaths = new List<string>();
+        FindFiles(copyFrom);
+        Debug.Log("dirPaths-------" + dirPaths.Count + "----filePaths---" + filePaths.Count);
+        string tempPath = null;
+        foreach (string path in dirPaths)
+        {
+            tempPath = copyTo + Util.CutString(path, "StreamingAssets");
+            if (!Directory.Exists(tempPath))
+                Directory.CreateDirectory(tempPath);
+        }
+        int size = filePaths.Count;
+        for (int i = 0; i < size; i++)
+        {
+            tempPath = copyTo + Util.CutString(filePaths[i], "StreamingAssets");
+            if (Application.isMobilePlatform)
+            {
+                WWW www = new WWW(filePaths[i]);
+                yield return www;
+                if (www.isDone && www.error == null)
+                {
+                    File.WriteAllBytes(tempPath, www.bytes);
+                }
+                yield return 0;
+            }
+            else
+                File.Copy(filePaths[i], tempPath, true);
+            yield return new WaitForEndOfFrame();
+            SingletonObject<LoadingMediator>.getInstance().Progress = (i + 1) / (float)size;
+        }
+        yield return null;
+        dirPaths.Clear();
+        filePaths.Clear();
+    }
+
+    private void FindFiles(string path)
+    {
+        if (File.Exists(path))
+        {
+            filePaths.Add(path);
+        }
+        else if (Directory.Exists(path))
+        {
+            dirPaths.Add(path);
+            string[] dirs = Directory.GetDirectories(path);
+            foreach (string dir in dirs)
+                FindFiles(dir);
+            string[] files = Directory.GetFiles(path);
+            foreach (string file in files)
+                FindFiles(file);
+        }
+    }
+    #endregion
+
+    //-----------------------------------test--------------------------------------------
 }
