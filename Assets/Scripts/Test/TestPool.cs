@@ -14,8 +14,21 @@ public class TestPool : MonoBehaviour {
         //names.Add("Prefabs/Sphere");
         pool.AllPreRes = names;
         DontDestroyOnLoad(go);
+
+        foreach (object s in Test())
+        {
+            Debug.Log(s);
+        }
 	}
 	
+        IEnumerable Test()
+        {
+          yield return 5;
+          yield return 1000;
+          yield break;
+          yield return 15;
+        }
+
 	// Update is called once per frame
 	void Update () {
 	    

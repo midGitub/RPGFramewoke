@@ -36,7 +36,7 @@ public class Util {
             name = name.Substring(0, index);
         }
         name = name.Replace('.', '/');
-        return path + "/uLua/lua/" + name + ".lua";
+        return path + "/ulua/Lua/" + name + ".lua";
     }
 
     public static void Log(string str) {

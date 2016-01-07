@@ -4,6 +4,7 @@ using UnityEditor;
 #endif
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 public class LoadedAssetBundle
 {
@@ -178,7 +179,12 @@ public class AssetBundleManager : SingletonBehaviour<AssetBundleManager>
 			return true;
 		WWW download = null;
 		string url = m_BaseLocalURL + assetBundleName;
-        Debug.Log("url------------"+url);
+        //如果不存在，就去读streamingAssetsPath路径的
+        if (!File.Exists(url.Replace("file://", "")))
+        {
+            Debug.Log("dont exist");
+            url = url.Replace("file://", "").Replace(Application.persistentDataPath, Application.streamingAssetsPath);
+        }
 		if (isLoadingAssetBundleManifest)
 			download = new WWW(url);
 		else

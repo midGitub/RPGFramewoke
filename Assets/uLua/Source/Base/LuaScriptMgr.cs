@@ -674,7 +674,7 @@ public class LuaScriptMgr
         fileList.Add(name);
 
 #if !LUA_ZIP
-        string path = Util.LuaPath(name);       
+        string path = Util.LuaPath(name);
         if (File.Exists(name))
         {
             str = File.ReadAllBytes(name);

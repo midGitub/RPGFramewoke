@@ -38,7 +38,7 @@ public class Tools : Editor {
         {
             string path = AssetDatabase.GetAssetPath(obj);          
             //如果是.meta文件，或者不是StreamingAssets路径下的，或者是文件夹
-            if (path.Contains(".meta") || !path.Contains(dirName) || !path.Contains("."))
+            if (path.Contains(".meta") || !path.Contains(dirName) || (!path.Contains(".") && Directory.Exists(path)))
             {
                 continue;
             }
