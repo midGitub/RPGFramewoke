@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class BaseModel{
-    private int id;
+    protected int id;
 
     public int Id {
         get { return id; }
