@@ -201,7 +201,7 @@ public class BaseCharacter : BaseActor {
     /// 是否可以被攻击
     /// </summary>
     public virtual bool IsPossibleAttacked() {
-        if (mCurState == 1 || mCurState == 13)
+        if (mCurState == eState.Sleep || mCurState == eState.Die)
             return false;
         return true;
     }
@@ -212,12 +212,12 @@ public class BaseCharacter : BaseActor {
     public virtual bool IsPossibleMove() {
         switch (mCurState)
         {
-            case 1:
-            case 13:    //死亡
-            case 9:     //滑动 
-            case 10:    //打倒
-            case 12:    //打昏
-            case 7:
+            case eState.Sleep:
+            case eState.Die:    //死亡
+            case eState.Slide:     //滑动 
+            case eState.Down:    //打倒
+            case eState.Stun:    //打昏
+            case eState.CriticalStiff:
                 return false;
         }
         return true;
@@ -292,7 +292,7 @@ public class BaseCharacter : BaseActor {
     /// 判断是否死亡
     /// </summary>
     public bool IsDead() {
-        return mCurState == 13;
+        return mCurState == eState.Die;
     }
 
     /// <summary>
@@ -305,23 +305,24 @@ public class BaseCharacter : BaseActor {
     public virtual void SelfDamage() { 
     
     }
-
-    public enum eState
-    {
-        None,
-        Sleep,
-        Advent,
-        Idle,
-        Move,
-        MoveTo,
-        Turn,
-        CriticalStiff,  //最后一击
-        Stiff,
-        Slide,          //滑动
-        Down,
-        StunSlide,
-        Stun,
-        Die,
-        Max
-    }
+}
+public enum eState
+{
+    None,//0
+    Sleep,
+    Advent,
+    Idle,
+    Move,
+    MoveTo,//5
+    Turn,
+    CriticalStiff,  //最后一击
+    Stiff,
+    Slide,          //滑动
+    Down,//10
+    StunSlide,
+    Stun,
+    Die,
+    Rush,//14
+    Rebirth,
+    Attack
 }

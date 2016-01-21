@@ -20,9 +20,10 @@ public class BaseActor : BaseObj{
 
     protected bool mUpdateShineEff;
 
-    protected int mCurState;
+    protected eState mCurState;
 
-    public int CurState {
+    public eState CurState
+    {
         get { return mCurState; }
     }
 
@@ -38,7 +39,7 @@ public class BaseActor : BaseObj{
 
     protected List<Material> mMaterials = new List<Material>();
 
-    protected int mPreState;
+    protected eState mPreState;
 
     public GameObject mShadow;
 
@@ -48,7 +49,7 @@ public class BaseActor : BaseObj{
 
     protected float mShineValue;
 
-    protected Dictionary<int, StateFunc> mStateFunc = new Dictionary<int, StateFunc>();
+    protected Dictionary<eState, StateFunc> mStateFunc = new Dictionary<eState, StateFunc>();
 
     protected StateParam mStateParam = new StateParam();
 
@@ -85,7 +86,7 @@ public class BaseActor : BaseObj{
             mStateFunc[mCurState].updateFunc(delta);
     }
 
-    public void RegisterState(int state,StateFunc.EnterFunc enFunc,StateFunc.UpdateFunc updateFunc,StateFunc.ExitFunc exitFunc) {
+    public void RegisterState(eState state,StateFunc.EnterFunc enFunc,StateFunc.UpdateFunc updateFunc,StateFunc.ExitFunc exitFunc) {
         if (!mStateFunc.ContainsKey(state)) {
             StateFunc func = new StateFunc { 
                 enterFunc=enFunc,
@@ -111,7 +112,8 @@ public class BaseActor : BaseObj{
             ac.AddEvent(evt);
     }
 
-    public void ChangeState(int state,StateParam param) {
+    public void ChangeState(eState state, StateParam param)
+    {
         if (mStateFunc.ContainsKey(mCurState) && mStateFunc[mCurState].exitFunc!=null)
             mStateFunc[mCurState].exitFunc();
         mPreState = mCurState;

@@ -7,7 +7,7 @@ public class TestMecanim : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         character1 = GameObject.Find("ls").GetComponent<Obj_Character>();
-        character2 = GameObject.Find("ls1").GetComponent<Obj_Character>();
+        //character2 = GameObject.Find("ls1").GetComponent<Obj_Character>();
 	}
 
     void OnGUI() {
@@ -21,7 +21,7 @@ public class TestMecanim : MonoBehaviour {
         if (GUI.Button(new Rect(140, 40, 60, 30), "atk1"))
         {
             character1.PlayAnima("atk1");
-            character2.PlayAnima("atk1");
+            //character2.PlayAnima("atk1");
         }
         if (GUI.Button(new Rect(20, 80, 60, 30), "atk2"))
         {
