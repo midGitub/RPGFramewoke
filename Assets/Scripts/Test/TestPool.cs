@@ -7,21 +7,11 @@ public class TestPool : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         GameObject go = new GameObject("ObjectPool");
-        ObjectPool pool= go.AddComponent<ObjectPool>();
-        List<string> names = new List<string>();
-        //names.Add("Prefabs/Capsule");
-        //names.Add("Prefabs/Cube");
-        //names.Add("Prefabs/Sphere");
-        pool.AllPreRes = names;
+        go.AddComponent<ObjectPool>();
         DontDestroyOnLoad(go);
-
         foreach (object s in Test())
             Debug.Log(s);
-        List<int> list = new List<int>();
-        list.Add(1);
-        list.Add(2);
-        list.Add(3);
-        list.Add(1);
+        Debug.Log("yield end");
 	}
 	
         IEnumerable Test()
@@ -29,13 +19,7 @@ public class TestPool : MonoBehaviour {
           yield return 5;
           yield return 1000;
           yield break;
-          yield return 15;
         }
-
-	// Update is called once per frame
-	void Update () {
-	    
-	}
 
     void OnGUI() { 
         if(GUI.Button(new Rect(Screen.width / 2 - 150, Screen.height - 150, 300, 50), "初始化物体")){
@@ -48,10 +32,6 @@ public class TestPool : MonoBehaviour {
             cube.transform.position = new Vector3(range2, range2, range2);
             int range3 = Random.Range(4, 8);
             sphere.transform.position = new Vector3(range3, range3, range3);
-        }
-        if (GUI.Button(new Rect(Screen.width / 2 - 150, Screen.height - 300, 300, 50), "切换场景"))
-        {
-            Application.LoadLevelAsync("test");
         }
     }
 }
