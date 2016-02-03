@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEditor;
 using UnityEditor.Animations;
 using System.Collections.Generic;
+using System.IO;
+using System;
 
 public class AnimatorEditor : Editor {
 
@@ -46,18 +48,126 @@ public class AnimatorEditor : Editor {
                transitionTo.exitTime = 0;
 
                //设置连招
-               if ("atk1".Equals(state.state.name))
-                   combos.Add(1,state.state);
-               else if ("atk2".Equals(state.state.name))
-                   combos.Add(2, state.state);
-               else if ("atk3".Equals(state.state.name))
-                   combos.Add(3, state.state);
-               else if ("atk4".Equals(state.state.name))
-                   combos.Add(4, state.state);
+               //if ("atk1".Equals(state.state.name))
+               //    combos.Add(1,state.state);
+               //else if ("atk2".Equals(state.state.name))
+               //    combos.Add(2, state.state);
+               //else if ("atk3".Equals(state.state.name))
+               //    combos.Add(3, state.state);
+               //else if ("atk4".Equals(state.state.name))
+               //    combos.Add(4, state.state);
            }
-           BindBehaviour(state.state);
+           //BindBehaviour(state.state);
        }
-       ConnectCombo(combos);
+       //ConnectCombo(combos);
+    }
+
+    private static string dirName = "StaticDatas";
+    private static string fileName = "skillEvent.txt";
+    private static List<SkillEvent> skillEvents;
+
+    [MenuItem("Tools/Animator/BindEvent")]
+    public static void BindEvent()
+    {
+        //AnimationUtility.SetAnimationEvents
+
+        skillEvents = null;
+        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets)) {
+            if (obj is AnimatorController) {
+                if (skillEvents == null)
+                    LoadFile(Application.dataPath + "/" + dirName+"/"+fileName);
+                AnimatorController  controller= obj as AnimatorController;
+                List<SkillEvent> result=skillEvents.FindAll(x => x.controllerName.Equals(controller.name));
+                if (result == null || result.Count == 0)
+                    continue;
+                foreach(SkillEvent skillEvent in result){
+                    AnimationClip[] clips=controller.animationClips;
+                    foreach(AnimationClip clip in clips){
+                        if(clip.name.Equals(skillEvent.animName)){
+                            List<string> methods=skillEvent.methodsName;
+                            Dictionary<int,string> ps=skillEvent.parametes;
+                            AnimationEvent[] events=new AnimationEvent[methods.Count];
+                            string[] tempPs;
+                            for (int i = 0; i < methods.Count;i++ )
+                            {
+                                tempPs = ps[i].Split('-');
+                                AnimationEvent ev = new AnimationEvent
+                                {
+                                    functionName=methods[i],
+                                    floatParameter = float.Parse(tempPs[0]),
+                                    intParameter=int.Parse(tempPs[1]),
+                                    stringParameter=tempPs[2],          
+                                    
+                                };
+                                //clip.AddEvent(ev);
+                                events[i]=ev;
+                            }
+                            AnimationUtility.SetAnimationEvents(clip,events);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void LoadFile(string path) {
+        if (File.Exists(path))
+        {
+            StreamReader reader=File.OpenText(path);
+            string content=reader.ReadToEnd();
+            reader.Dispose();
+            skillEvents = ParseSkillEvents(content);
+        }else
+            Debug.LogWarning("The file path:---"+path+"---don't exists!");
+    }
+
+    private static List<SkillEvent> ParseSkillEvents(string content)
+    {
+        string[] items=content.Split(',');
+        if(items.Length<2)
+            return null;
+        skillEvents=new List<SkillEvent>();
+        SkillEvent skillEvent;
+        for (int i = 1; i < items.Length;i++ )
+        {
+            string[] element=items[i].Split('\t');
+            string keys=element[3];
+            string[] allKey=keys.Split('/');
+            List<int> tempKeys = new List<int>();
+            foreach(string s in allKey){
+                tempKeys.Add(int.Parse(s));
+            }
+            string[] parameters = element[6].Split('/');
+            Dictionary<int, string> tempParams = new Dictionary<int, string>();
+            for (int j = 0; j < parameters.Length;j++ )
+            {
+                tempParams.Add(j, parameters[j]);
+            }
+
+            skillEvent = new SkillEvent
+            {
+                id=int.Parse(element[0]),
+                name=element[1],
+                controllerName=element[2],
+                keys=tempKeys,
+                animName=element[4],
+                methodsName = new List<string>(element[5].Split('/')),
+                parametes = tempParams
+            };
+            skillEvents.Add(skillEvent);
+        }
+
+        return skillEvents;
+    }
+
+    struct SkillEvent {
+        public int id;
+        public string name;
+        public string controllerName;
+        public List<int> keys;
+        public string animName;
+        public List<string> methodsName;
+        public Dictionary<int, string> parametes;
     }
 
     //绑定behaviour
