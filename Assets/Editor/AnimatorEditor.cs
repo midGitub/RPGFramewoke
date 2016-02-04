@@ -69,8 +69,6 @@ public class AnimatorEditor : Editor {
     [MenuItem("Tools/Animator/BindEvent")]
     public static void BindEvent()
     {
-        //AnimationUtility.SetAnimationEvents
-
         skillEvents = null;
         foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets)) {
             if (obj is AnimatorController) {
@@ -97,9 +95,8 @@ public class AnimatorEditor : Editor {
                                     floatParameter = float.Parse(tempPs[0]),
                                     intParameter=int.Parse(tempPs[1]),
                                     stringParameter=tempPs[2],          
-                                    
+                                    time=0.3f                                 
                                 };
-                                //clip.AddEvent(ev);
                                 events[i]=ev;
                             }
                             AnimationUtility.SetAnimationEvents(clip,events);
@@ -107,6 +104,34 @@ public class AnimatorEditor : Editor {
                     }
                 }
             }
+        }
+    }
+
+    [MenuItem("Tools/Animator/TestBindEvent")]
+    public static void BindSingleAnimation() {
+        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets)) {
+            string path = AssetDatabase.GetAssetPath(obj);
+            ModelImporter modelImporter = (ModelImporter)ModelImporter.GetAtPath(path);
+            if (modelImporter.defaultClipAnimations[0] == null) return;
+            ModelImporterClipAnimation importerClip = modelImporter.defaultClipAnimations[0];
+            AnimationEvent[] evs=new AnimationEvent[1];
+            AnimationEvent ev = new AnimationEvent
+            {
+                floatParameter = 0.3f,
+                intParameter = 2,
+                stringParameter = "aaa",
+                time = 0.18f,
+                functionName="test"
+            };
+            evs[0] = ev;
+            ModelImporterClipAnimation mica = new ModelImporterClipAnimation();
+            mica.loopTime = importerClip.loopTime;
+            mica.firstFrame = importerClip.firstFrame;
+            mica.lastFrame = importerClip.lastFrame;
+            mica.name = importerClip.name;
+            mica.events = evs;
+            modelImporter.clipAnimations = new ModelImporterClipAnimation[] { mica };
+            modelImporter.SaveAndReimport();
         }
     }
 
