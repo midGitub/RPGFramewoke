@@ -6,11 +6,41 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 
-public class AnimatorEditor : Editor {
+public class AnimatorEditor : Editor
+{
 
+    #region 私有变量
+    /// <summary>
+    /// animatorcontroller默认状态
+    /// </summary>
     private static string defaultStateName = "idle";
     private static Dictionary<int, AnimatorState> combos;
+    /// <summary>
+    /// 静态文件存放文件夹
+    /// </summary>
+    private static string dirName = "StaticDatas";
+    /// <summary>
+    /// 技能事件表名
+    /// </summary>
+    private static string configName = "skillEvent.txt";
+    private static List<SkillEvent> skillEvents;
+    #endregion
 
+    class SkillEvent
+    {
+        public int id;
+        public string name;
+        public string controllerName;
+        public List<int> keys;
+        public string animName;
+        public List<string> methodsName;
+        public Dictionary<int, string> parametes;
+    }
+
+    #region 编辑器方法
+    /// <summary>
+    /// 根据动画文件生成Animator Controller
+    /// </summary>
     [MenuItem("Tools/Animator/Create AnimatorController")]
     public static void CreateAnimatorController() {
         AnimatorController controller = null;
@@ -62,79 +92,67 @@ public class AnimatorEditor : Editor {
        //ConnectCombo(combos);
     }
 
-    private static string dirName = "StaticDatas";
-    private static string fileName = "skillEvent.txt";
-    private static List<SkillEvent> skillEvents;
-
+    /// <summary>
+    /// 读表绑定动画事件
+    /// </summary>
     [MenuItem("Tools/Animator/BindEvent")]
     public static void BindEvent()
     {
         skillEvents = null;
-        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets)) {
-            if (obj is AnimatorController) {
-                if (skillEvents == null)
-                    LoadFile(Application.dataPath + "/" + dirName+"/"+fileName);
-                AnimatorController  controller= obj as AnimatorController;
-                List<SkillEvent> result=skillEvents.FindAll(x => x.controllerName.Equals(controller.name));
-                if (result == null || result.Count == 0)
+        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets)) {
+            string filePath = AssetDatabase.GetAssetPath(obj);
+            if (File.Exists(filePath) && filePath.EndsWith(".FBX"))
+            {
+                string fileName = filePath.Substring(filePath.LastIndexOf('/')+1);
+                string[] result=fileName.Split('.')[0].Split('@');
+                if (result.Length < 2)
                     continue;
-                foreach(SkillEvent skillEvent in result){
-                    AnimationClip[] clips=controller.animationClips;
-                    foreach(AnimationClip clip in clips){
-                        if(clip.name.Equals(skillEvent.animName)){
-                            List<string> methods=skillEvent.methodsName;
-                            Dictionary<int,string> ps=skillEvent.parametes;
-                            AnimationEvent[] events=new AnimationEvent[methods.Count];
-                            string[] tempPs;
-                            for (int i = 0; i < methods.Count;i++ )
-                            {
-                                tempPs = ps[i].Split('-');
-                                AnimationEvent ev = new AnimationEvent
-                                {
-                                    functionName=methods[i],
-                                    floatParameter = float.Parse(tempPs[0]),
-                                    intParameter=int.Parse(tempPs[1]),
-                                    stringParameter=tempPs[2],          
-                                    time=0.3f                                 
-                                };
-                                events[i]=ev;
-                            }
-                            AnimationUtility.SetAnimationEvents(clip,events);
-                        }
-                    }
+                string controllerName = result[0];
+                string animName = result[1];             
+                if(skillEvents==null)
+                    LoadFile(Application.dataPath + "/" + dirName + "/" + configName);
+                SkillEvent se=skillEvents.Find(x=>x.controllerName.Equals(controllerName) && x.animName.Equals(animName));
+                if (se==null)
+                    continue;
+                Debug.Log("controllerName is:" + controllerName + "---animName is:" + animName);
+                Dictionary<int, string> ps = se.parametes;
+                List<string> methodNames=se.methodsName;
+                List<int> keys=se.keys;
+                ModelImporter modelImporter = (ModelImporter)ModelImporter.GetAtPath(filePath);
+                if (modelImporter.defaultClipAnimations[0] == null) return;
+                ModelImporterClipAnimation importerClip = modelImporter.defaultClipAnimations[0];
+                AnimationEvent[] evs = new AnimationEvent[methodNames.Count];          
+                string[] tempPs;
+                for (int i = 0; i < methodNames.Count; i++)
+                {
+                    tempPs = ps[i].Split('-');
+                    AnimationEvent ev = new AnimationEvent
+                    {
+                        floatParameter = float.Parse(tempPs[0]),
+                        intParameter = int.Parse(tempPs[1]),
+                        stringParameter =tempPs[2],
+                        time = (keys[i]-importerClip.firstFrame)/30f,
+                        functionName = methodNames[i]
+                    };
+                    evs[i]=ev;
                 }
+                ModelImporterClipAnimation mica = new ModelImporterClipAnimation();
+                mica.loopTime = importerClip.loopTime;
+                mica.firstFrame = importerClip.firstFrame;
+                mica.lastFrame = importerClip.lastFrame;
+                mica.name = importerClip.name;
+                mica.events = evs;
+                modelImporter.clipAnimations = new ModelImporterClipAnimation[] { mica };
+                modelImporter.SaveAndReimport();
             }
         }
     }
+    #endregion
 
-    [MenuItem("Tools/Animator/TestBindEvent")]
-    public static void BindSingleAnimation() {
-        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.Assets)) {
-            string path = AssetDatabase.GetAssetPath(obj);
-            ModelImporter modelImporter = (ModelImporter)ModelImporter.GetAtPath(path);
-            if (modelImporter.defaultClipAnimations[0] == null) return;
-            ModelImporterClipAnimation importerClip = modelImporter.defaultClipAnimations[0];
-            AnimationEvent[] evs=new AnimationEvent[1];
-            AnimationEvent ev = new AnimationEvent
-            {
-                floatParameter = 0.3f,
-                intParameter = 2,
-                stringParameter = "aaa",
-                time = 0.18f,
-                functionName="test"
-            };
-            evs[0] = ev;
-            ModelImporterClipAnimation mica = new ModelImporterClipAnimation();
-            mica.loopTime = importerClip.loopTime;
-            mica.firstFrame = importerClip.firstFrame;
-            mica.lastFrame = importerClip.lastFrame;
-            mica.name = importerClip.name;
-            mica.events = evs;
-            modelImporter.clipAnimations = new ModelImporterClipAnimation[] { mica };
-            modelImporter.SaveAndReimport();
-        }
-    }
-
+    #region 私有方法
+    /// <summary>
+    /// 加载技能事件配置文件
+    /// </summary>
     private static void LoadFile(string path) {
         if (File.Exists(path))
         {
@@ -146,6 +164,9 @@ public class AnimatorEditor : Editor {
             Debug.LogWarning("The file path:---"+path+"---don't exists!");
     }
 
+    /// <summary>
+    /// 解析技能事件配置文件
+    /// </summary>
     private static List<SkillEvent> ParseSkillEvents(string content)
     {
         string[] items=content.Split(',');
@@ -185,17 +206,9 @@ public class AnimatorEditor : Editor {
         return skillEvents;
     }
 
-    struct SkillEvent {
-        public int id;
-        public string name;
-        public string controllerName;
-        public List<int> keys;
-        public string animName;
-        public List<string> methodsName;
-        public Dictionary<int, string> parametes;
-    }
-
-    //绑定behaviour
+    /// <summary>
+    /// 绑定behaviour
+    /// </summary>
     private static void BindBehaviour(AnimatorState state) { 
         switch(state.name){
             case "idle":
@@ -234,7 +247,9 @@ public class AnimatorEditor : Editor {
         }
     }
 
-    //给controller增加参数，参数名为motion名，且为bool类型
+    /// <summary>
+    /// 给controller增加参数，参数名为motion名，且为bool类型
+    /// </summary>
     private static void AddParameter(string path, AnimatorController controller)
     {
         AnimatorStateMachine sm = controller.layers[0].stateMachine;
@@ -251,12 +266,16 @@ public class AnimatorEditor : Editor {
             sm.defaultState = state;//设置默认state       
     }
 
-    //根据动画文件路径获取文件名
+    /// <summary>
+    /// 根据动画文件路径获取文件名
+    /// </summary>
     private static string FetchFileName(string path) {
         return path.Split('@')[1].Split('.')[0];
     }
 
-    //设置连招的连接
+    /// <summary>
+    /// 设置连招的连接
+    /// </summary>
     private static void ConnectCombo(Dictionary<int,AnimatorState> combos) {
         int len = combos.Count;
         for (int i = 1; i < len+1;i++ )
@@ -270,5 +289,5 @@ public class AnimatorEditor : Editor {
             
         }
     }
-
+    #endregion
 }
