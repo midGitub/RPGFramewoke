@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: b27ffadd68d07204a839a10f4119a38d
-timeCreated: 1454870154
+timeCreated: 1454923286
 licenseType: Pro
 ModelImporter:
   serializedVersion: 18
@@ -157,21 +157,7 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: .300000012
-        functionName: OnSkill1Start
-        data: abc
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: .100000001
-        intParameter: 2
-        messageOptions: 0
-      - time: .800000012
-        functionName: OnSkill1End
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 0
       maskSource: {instanceID: 0}
