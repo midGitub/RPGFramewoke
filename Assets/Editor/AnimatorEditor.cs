@@ -159,7 +159,9 @@ public class AnimatorEditor : Editor
             if (File.Exists(filePath) && filePath.EndsWith(".FBX"))
             {
                 ModelImporter modelImporter = (ModelImporter)ModelImporter.GetAtPath(filePath);
-                if (modelImporter.defaultClipAnimations[0] == null) return;
+                if (modelImporter == null || modelImporter.clipAnimations.Length == 0
+                    || modelImporter.clipAnimations[0].events.Length == 0)
+                    continue;
                 ModelImporterClipAnimation importerClip = modelImporter.defaultClipAnimations[0];
                 ModelImporterClipAnimation mica = new ModelImporterClipAnimation();
                 mica.loopTime = importerClip.loopTime;
