@@ -153,9 +153,11 @@ public class AnimatorEditor : Editor
     /// </summary>
     [MenuItem("Tools/Animator/ClearEvent")]
     public static void ClearEvent() {
-        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets)) { 
+        foreach (UnityEngine.Object obj in Selection.GetFiltered(typeof(UnityEngine.Object), SelectionMode.DeepAssets))
+        {
             string filePath = AssetDatabase.GetAssetPath(obj);
-            if (File.Exists(filePath) && filePath.EndsWith(".FBX")){
+            if (File.Exists(filePath) && filePath.EndsWith(".FBX"))
+            {
                 ModelImporter modelImporter = (ModelImporter)ModelImporter.GetAtPath(filePath);
                 if (modelImporter.defaultClipAnimations[0] == null) return;
                 ModelImporterClipAnimation importerClip = modelImporter.defaultClipAnimations[0];
@@ -164,11 +166,8 @@ public class AnimatorEditor : Editor
                 mica.firstFrame = importerClip.firstFrame;
                 mica.lastFrame = importerClip.lastFrame;
                 mica.name = importerClip.name;
-                modelImporter.clipAnimations = new ModelImporterClipAnimation[] { mica};
+                modelImporter.clipAnimations = new ModelImporterClipAnimation[] { mica };
                 modelImporter.SaveAndReimport();
-
-                
-
             }
         }
     }
