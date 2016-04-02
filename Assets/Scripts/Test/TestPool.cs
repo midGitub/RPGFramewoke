@@ -10,8 +10,8 @@ public class TestPool : MonoBehaviour {
         go.AddComponent<ObjectPool>();
         DontDestroyOnLoad(go);
         foreach (object s in Test())
-            Debug.Log(s);
-        Debug.Log("yield end");
+            GLog.Log(s);
+        GLog.Log("yield end");
 	}
 	
         IEnumerable Test()
